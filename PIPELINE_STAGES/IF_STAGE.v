@@ -7,7 +7,7 @@
 // Project Name: PROJECT_ICARUS
 //////////////////////////////////////////////////////////////////////////////////
 
-module IF_STAGE(Clk, Rst, JumpOr, Br_AND, Br_ADD, JumpMux, IM_Out);
+module IF_STAGE(Clk, Rst, JumpOr, Br_AND, Br_ADD, JumpMux, IM_Out, PCI_Out);
     
     input Clk, Rst;
     
@@ -18,10 +18,10 @@ module IF_STAGE(Clk, Rst, JumpOr, Br_AND, Br_ADD, JumpMux, IM_Out);
     //Internal wires
     wire [31:0] PC_Out,
                 PC_Src_Out,
-                PCI_Out,
                 JumpMux_Out;
     
-    output wire [31:0] IM_Out;            
+    output wire [31:0] IM_Out,
+                       PCI_Out;            
     
     ProgramCounter PC(
         .Address(PC_Src_Out),
