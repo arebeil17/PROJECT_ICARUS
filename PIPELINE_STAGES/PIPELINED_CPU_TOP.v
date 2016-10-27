@@ -61,7 +61,8 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .IM(IFID_IM_Out),
         .PCI(IFID_PCI_Out), 
         .WriteAddr(), 
-        .WriteData(),  
+        .WriteData(),
+        .IM_Out(IDEX_IM),  
         .ALUOp(IDEX_ALUOp), .RegWrite(IDEX_RegWrite), .ALUSrc(IDEX_ALUSrc), .MemWrite(IDEX_MemWrite), .MemRead(IDEX_MemRead), 
         .Branch(IDEX_Branch), .MemToReg(IDEX_MemToReg), .SignExt(IDEX_SignExt), .JumpMuxSel(IDEX_JumpMuxSel), .ByteSel(IDEX_ByteSel), 
         .RegDst(IDEX_RegDst), .SE_Out(IDEX_SE), .RF_RD1(IDEX_RF_RD1), .RF_RD2(IDEX_RF_RD2), .PCI_Out(IDEX_PCI));
@@ -81,18 +82,19 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
      
      wire [4:0] IDEX_ALUOp, IDEX_ALUOp_Out;
      
-     wire [31:0] IDEX_SE,     IDEX_SE_Out,
+     wire [31:0] IDEX_IM,     IDEX_IM_Out,
+                 IDEX_SE,     IDEX_SE_Out,
                  IDEX_RF_RD1, IDEX_RF_RD1_Out, 
                  IDEX_RF_RD2, IDEX_RF_RD2_Out,
                  IDEX_PCI,    IDEX_PCI_Out;
                     
      STAGE_REG_2    ID_EX_SR2(
         //Inputs
-        .Clk(ClkOut), .Rst(Rst), .RegWrite(IDEX_RegWrite), .ALUSrc(IDEX_ALUSrc), .MemWrite(IDEX_MemWrite), .MemRead(IDEX_MemRead), .Branch(IDEX_Branch), 
+        .Clk(ClkOut), .Rst(Rst), .IM(IDEX_IM), .RegWrite(IDEX_RegWrite), .ALUSrc(IDEX_ALUSrc), .MemWrite(IDEX_MemWrite), .MemRead(IDEX_MemRead), .Branch(IDEX_Branch), 
         .MemToReg(IDEX_MemToReg), .SignExt(IDEX_SignExt), .JumpMuxSel(IDEX_JumpMuxSel), .ByteSel(IDEX_ByteSel), .RegDst(IDEX_RegDst), .ALUOp(IDEX_ALUOp), 
         .SE(IDEX_SE), .RF_RD1(IDEX_RF_RD1), .RF_RD2(IDEX_RF_RD2), .PCI(IDEX_PCI),
         //Outputs 
-        .RegWrite_Out(), .ALUSrc_Out(), .MemWrite_Out(), .MemRead_Out(), .Branch_Out(), .MemToReg_Out(), .SignExt_Out(), .JumpMuxSel_Out(), .ByteSel_Out(),
+        .IM_Out(),.RegWrite_Out(), .ALUSrc_Out(), .MemWrite_Out(), .MemRead_Out(), .Branch_Out(), .MemToReg_Out(), .SignExt_Out(), .JumpMuxSel_Out(), .ByteSel_Out(),
         .RegDst_Out(), .ALUOp_Out(), .SE_Out(), .RF_RD1_Out(), .RF_RD2_Out(), .PCI_Out());
     
     //Execute Stage 3

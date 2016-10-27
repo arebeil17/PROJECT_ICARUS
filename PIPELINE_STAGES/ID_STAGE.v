@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module ID_STAGE(Clk, Rst, RW_AND, IM, PCI, WriteAddr, WriteData,  
-                ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, SignExt, JumpMuxSel, ByteSel, RegDst, 
+                IM_Out, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, SignExt, JumpMuxSel, ByteSel, RegDst, 
                 SE_Out, RF_RD1, RF_RD2, PCI_Out);
 
     input Clk, Rst, RW_AND;
@@ -17,7 +17,8 @@ module ID_STAGE(Clk, Rst, RW_AND, IM, PCI, WriteAddr, WriteData,
     
     input [4:0] WriteAddr;
     //Output wires
-    output wire [31:0] SE_Out,
+    output wire [31:0] IM_Out,
+                       SE_Out,
                        RF_RD1,
                        RF_RD2,
                        PCI_Out;
@@ -69,5 +70,6 @@ module ID_STAGE(Clk, Rst, RW_AND, IM, PCI, WriteAddr, WriteData,
         
     //Passthrough Wires
     assign PCI_Out = PCI;
+    assign IM_Out = IM;
         
 endmodule

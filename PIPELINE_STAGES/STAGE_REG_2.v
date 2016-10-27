@@ -8,8 +8,8 @@
 // Project Name: 
 //////////////////////////////////////////////////////////////////////////////////
 
-module STAGE_REG_2(Clk, Rst, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, SignExt, JumpMuxSel, ByteSel, RegDst, ALUOp, SE, RF_RD1, RF_RD2, PCI, 
-                             RegWrite_Out, ALUSrc_Out, MemWrite_Out, MemRead_Out, Branch_Out, MemToReg_Out, SignExt_Out, JumpMuxSel_Out, ByteSel_Out, RegDst_Out, ALUOp_Out, SE_Out, RF_RD1_Out, RF_RD2_Out, PCI_Out);
+module STAGE_REG_2(Clk, Rst, IM, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, SignExt, JumpMuxSel, ByteSel, RegDst, ALUOp, SE, RF_RD1, RF_RD2, PCI, 
+                             IM_Out, RegWrite_Out, ALUSrc_Out, MemWrite_Out, MemRead_Out, Branch_Out, MemToReg_Out, SignExt_Out, JumpMuxSel_Out, ByteSel_Out, RegDst_Out, ALUOp_Out, SE_Out, RF_RD1_Out, RF_RD2_Out, PCI_Out);
 
     input Clk, Rst;
     
@@ -29,7 +29,8 @@ module STAGE_REG_2(Clk, Rst, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToR
     input [4:0] ALUOp;
     
     //Datapath pass-through inputs
-    input [31:0] SE, 
+    input [31:0] IM,
+                 SE, 
                  RF_RD1, 
                  RF_RD2, 
                  PCI;
@@ -49,7 +50,8 @@ module STAGE_REG_2(Clk, Rst, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToR
      output reg [4:0] ALUOp_Out;
      
      //Datapath pass-through Outputs
-     output reg [31:0] SE_Out, 
+     output reg [31:0] IM_Out,
+                       SE_Out, 
                        RF_RD1_Out, 
                        RF_RD2_Out, 
                        PCI_Out;  
@@ -57,6 +59,7 @@ module STAGE_REG_2(Clk, Rst, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToR
      always @(posedge Clk) begin
         
         if(Rst) begin
+            IM_Out         <= 0;
             RegWrite_Out   <= 0; 
             ALUSrc_Out     <= 0;
             MemWrite_Out   <= 0; 
@@ -73,6 +76,7 @@ module STAGE_REG_2(Clk, Rst, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToR
             RF_RD2_Out     <= 0; 
             PCI_Out        <= 0;
         end else begin
+            IM_Out         <= IM;
             RegWrite_Out   <= RegWrite; 
             ALUSrc_Out     <= ALUSrc;
             MemWrite_Out   <= MemWrite; 
