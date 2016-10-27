@@ -67,5 +67,7 @@ module ID_STAGE(Clk, Rst, RW_AND, IM, PCI, WriteAddr, WriteData,
         .In(IM[15:0]),
         .Out(SE_Out));   
         
+    //Passthrough Wires
+    assign PCI_Out = PCI;
         
 endmodule
