@@ -8,7 +8,22 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MEM_STAGE(
-
-    );
+module MEM_STAGE();
+    
+    
+    
+    AND BranchAnd(
+        .InA(ALU_Zero),
+        .InB(Branch),
+        .Out(BranchAnd_Out));
+    
+    DataMemory DM(
+        .Address(ALU_Out),
+        .WriteData(RF_RD2),
+        .ByteSel(ByteSel),
+        .Clk(ClkOut),
+        .MemWrite(MemWrite),
+        .MemRead(MemRead),
+        .ReadData(DM_Out));
+        
 endmodule

@@ -33,6 +33,27 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
                 IFID_IM_Out,
                 IFID_PCI,
                 IFID_PCI_Out;
+                
+    //STAGE 2 INPUTS/OUTPUTS
+     wire IDEX_RegWrite,   IDEX_RegWrite_Out, 
+          IDEX_ALUSrc,     IDEX_ALUSrc_Out, 
+          IDEX_MemWrite,   IDEX_MemWrite_Out, 
+          IDEX_MemRead,    IDEX_MemRead_Out, 
+          IDEX_Branch,     IDEX_Branch_Out,
+          IDEX_MemToReg,   IDEX_MemToReg_Out, 
+          IDEX_SignExt,    IDEX_SignExt_Out, 
+          IDEX_JumpMuxSel, IDEX_JumpMuxSel_Out;      
+     
+     wire [1:0] IDEX_ByteSel, IDEX_ByteSel_Out,
+                IDEX_RegDst,  IDEX_RegDst_Out;
+     
+     wire [4:0] IDEX_ALUOp, IDEX_ALUOp_Out;
+     
+     wire [31:0] IDEX_IM,     IDEX_IM_Out,
+                 IDEX_SE,     IDEX_SE_Out,
+                 IDEX_RF_RD1, IDEX_RF_RD1_Out, 
+                 IDEX_RF_RD2, IDEX_RF_RD2_Out,
+                 IDEX_PCI,    IDEX_PCI_Out;
 
     //Instruction Fetch Stage 1
     IF_STAGE    IF_S1(
@@ -66,28 +87,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .ALUOp(IDEX_ALUOp), .RegWrite(IDEX_RegWrite), .ALUSrc(IDEX_ALUSrc), .MemWrite(IDEX_MemWrite), .MemRead(IDEX_MemRead), 
         .Branch(IDEX_Branch), .MemToReg(IDEX_MemToReg), .SignExt(IDEX_SignExt), .JumpMuxSel(IDEX_JumpMuxSel), .ByteSel(IDEX_ByteSel), 
         .RegDst(IDEX_RegDst), .SE_Out(IDEX_SE), .RF_RD1(IDEX_RF_RD1), .RF_RD2(IDEX_RF_RD2), .PCI_Out(IDEX_PCI));
-    
-    //STAGE 2 INPUTS/OUTPUTS
-     wire IDEX_RegWrite,   IDEX_RegWrite_Out, 
-          IDEX_ALUSrc,     IDEX_ALUSrc_Out, 
-          IDEX_MemWrite,   IDEX_MemWrite_Out, 
-          IDEX_MemRead,    IDEX_MemRead_Out, 
-          IDEX_Branch,     IDEX_Branch_Out,
-          IDEX_MemToReg,   IDEX_MemToReg_Out, 
-          IDEX_SignExt,    IDEX_SignExt_Out, 
-          IDEX_JumpMuxSel, IDEX_JumpMuxSel_Out;      
-     
-     wire [1:0] IDEX_ByteSel, IDEX_ByteSel_Out,
-                IDEX_RegDst,  IDEX_RegDst_Out;
-     
-     wire [4:0] IDEX_ALUOp, IDEX_ALUOp_Out;
-     
-     wire [31:0] IDEX_IM,     IDEX_IM_Out,
-                 IDEX_SE,     IDEX_SE_Out,
-                 IDEX_RF_RD1, IDEX_RF_RD1_Out, 
-                 IDEX_RF_RD2, IDEX_RF_RD2_Out,
-                 IDEX_PCI,    IDEX_PCI_Out;
-                    
+                  
      STAGE_REG_2    ID_EX_SR2(
         //Inputs
         .Clk(ClkOut), .Rst(Rst), .IM(IDEX_IM), .RegWrite(IDEX_RegWrite), .ALUSrc(IDEX_ALUSrc), .MemWrite(IDEX_MemWrite), .MemRead(IDEX_MemRead), .Branch(IDEX_Branch), 
@@ -96,6 +96,8 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         //Outputs 
         .IM_Out(),.RegWrite_Out(), .ALUSrc_Out(), .MemWrite_Out(), .MemRead_Out(), .Branch_Out(), .MemToReg_Out(), .SignExt_Out(), .JumpMuxSel_Out(), .ByteSel_Out(),
         .RegDst_Out(), .ALUOp_Out(), .SE_Out(), .RF_RD1_Out(), .RF_RD2_Out(), .PCI_Out());
+        
+        //Execution Stage 3
     
     //Execute Stage 3
     EX_STAGE    EX_S3();
