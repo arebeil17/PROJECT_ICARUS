@@ -20,22 +20,23 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module STAGE_REG_1(Clk, Rst, IM, IM_Out, PCI, PCI_Out);
+module IFID_Reg(Clock, Reset, WriteEnable, Instruction_In, Instruction_Out, PCI_In, PCI_Out);
 
-    input Clk, Rst;
+    input Clock, Reset, WriteEnable;
     
-    input [31:0] IM, PCI;
+    input [31:0] Instruction_In, PCI_In;
     
-    output reg [31:0] IM_Out = 0, 
-                      PCI_Out = 0;
+    output reg [31:0] Instruction_Out = 0, PCI_Out = 0;
     
-    always @(posedge Clk) begin
-        if(Rst) begin
+    always @(posedge Clock) begin
+        if(Reset) begin
             PCI_Out <= 0;
-            IM_Out <= 0;
+            Instruction_Out <= 0;
         end else begin
-            PCI_Out <= PCI;
-            IM_Out <= IM;
+            if(WriteEnable)begin
+                PCI_Out <= PCI_In;
+                Instruction_Out <= Instruction_In;
+            end
         end
     end
     

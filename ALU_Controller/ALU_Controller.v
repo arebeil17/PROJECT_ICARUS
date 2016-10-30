@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
-module ALU_Controller(Rst, AluOp, Funct, ALUControl);
+module ALU_Controller(Reset, AluOp, Funct, ALUControl);
 
-    input Rst;
+    input Reset;
     input [4:0] AluOp;           //5 bit AluOp code sent from controller 
     
     input [5:0] Funct;           //6 bit Instruction function field

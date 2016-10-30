@@ -18,11 +18,11 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module HiLoRegister(WriteEnable , WriteData, HiLoReg, Clk, Reset);
+module HiLoRegister(WriteEnable , WriteData, HiLoReg, Clock, Reset);
     input [63:0] WriteData;
     //output [63:0] ReadData;
     
-    input Reset, Clk, WriteEnable;
+    input Reset, Clock, WriteEnable;
     
     output reg [63:0] HiLoReg = 0; 
 
@@ -34,7 +34,7 @@ module HiLoRegister(WriteEnable , WriteData, HiLoReg, Clk, Reset);
 //        HiLo <= 64'd0;
 //    end
     
-    always @(negedge Clk) begin
+    always @(negedge Clock) begin
         if(WriteEnable) begin
             HiLoReg <= WriteData;
         end

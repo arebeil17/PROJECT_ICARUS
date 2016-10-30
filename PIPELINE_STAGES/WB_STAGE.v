@@ -8,13 +8,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module WB_STAGE();
-
+module WB_STAGE(Clock, Reset, MemToReg, ALUResult, ReadData, PCI, MemToReg_Out);
+    input Clock, Reset;
+    input [1:0] MemToReg;
+    input [31:0] ALUResult, ReadData, PCI;
+    
+    output [31:0] MemToReg_Out;
+    
     Mux32Bit4To1 MemToRegMux(
         .Out(MemToReg_Out),
-        .In0(ALU_Out),
-        .In1(DM_Out),
-        .In2(PCI_Out),
+        .In0(ALUResult),
+        .In1(ReadData),
+        .In2(PCI),
         .In3(32'b0),
         .sel(MemToReg));
         

@@ -7,39 +7,36 @@
 // Project Name: 
 //////////////////////////////////////////////////////////////////////////////////
 
-module ID_STAGE(Clk, Rst, RW_AND, IM, PCI, WriteAddr, WriteData,  
-                IM_Out, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, SignExt, JumpMuxSel, ByteSel, RegDst, 
-                SE_Out, RF_RD1, RF_RD2, PCI_Out);
+module ID_STAGE(
+    // Control Input(s)
+    Clock, Reset, RegWrite_In,
+    // Data Input(s)
+    Instruction, WriteAddr, WriteData,  
+    // Control Output(s)
+    ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, JumpMuxSel, ByteSel, RegDst, Jump, 
+    // Outputs
+    SE_Out, RF_RD1, RF_RD2);
 
-    input Clk, Rst, RW_AND;
+    input Clock, Reset, RegWrite_In;
     
-    input [31:0] IM, WriteData, PCI;
+    input [31:0] Instruction, WriteData;
     
     input [4:0] WriteAddr;
+    
     //Output wires
-    output wire [31:0] IM_Out,
-                       SE_Out,
-                       RF_RD1,
-                       RF_RD2,
-                       PCI_Out;
+    output wire [31:0] SE_Out, RF_RD1, RF_RD2;
          
     //Control Signal Outputs
     output [4:0] ALUOp;
     
-    output RegWrite,
-           ALUSrc,
-           MemWrite,
-           MemRead,
-           Branch,
-           MemToReg,
-           SignExt,
-           JumpMuxSel;
+    output RegWrite, ALUSrc, MemWrite, MemRead, Branch, JumpMuxSel, Jump;
      
-     output [1:0] ByteSel,
-                  RegDst;      
-                     
+    output [1:0] ByteSel, RegDst, MemToReg;      
+    
+    wire SignExt;
+    
     DatapathController Controller(
-        .OpCode(IM[31:26]),
+        .OpCode(Instruction[31:26]),
         .AluOp(ALUOp),
         .RegDst(RegDst),
         .RegWrite(RegWrite),
@@ -54,22 +51,17 @@ module ID_STAGE(Clk, Rst, RW_AND, IM, PCI, WriteAddr, WriteData,
         .ByteSel(ByteSel));
                
      RegisterFile RF(
-        .ReadRegister1(IM[25:21]),
-        .ReadRegister2(IM[20:16]),
+        .ReadRegister1(Instruction[25:21]),
+        .ReadRegister2(Instruction[20:16]),
         .WriteRegister(WriteAddr),
         .WriteData(WriteData),
-        .RegWrite(RW_AND),
-        .Clk(Clk),
+        .RegWrite(RegWrite_In),
+        .Clk(Clock),
         .ReadData1(RF_RD1),
         .ReadData2(RF_RD2),
-        .Reset(Rst));
+        .Reset(Reset));
         
      SignExtension SE(
-        .In(IM[15:0]),
-        .Out(SE_Out));   
-        
-    //Passthrough Wires
-    assign PCI_Out = PCI;
-    assign IM_Out = IM;
-        
+        .In(Instruction[15:0]),
+        .Out(SE_Out));
 endmodule

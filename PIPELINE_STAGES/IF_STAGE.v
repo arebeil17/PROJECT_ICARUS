@@ -7,44 +7,39 @@
 // Project Name: PROJECT_ICARUS
 //////////////////////////////////////////////////////////////////////////////////
 
-module IF_STAGE(Clk, Rst, JumpOr, Br_AND, Br_ADD, JumpMux, IM_Out, PCI_Out);
+module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, PCI);
     
-    input Clk, Rst;
+    input Clock, Reset;
     
-    input JumpOr, Br_AND;
+    input Jump, Branch;
     
-    input [31:0] JumpMux, Br_ADD;
+    input [31:0] JumpDest, BranchDest;
     
     //Internal wires
-    wire [31:0] PC_Out,
-                PC_Src_Out,
-                JumpMux_Out;
+    wire [31:0] PC_Out, PC_Src_Out, JumpMux_Out;
     
-    output wire [31:0] IM_Out,
-                       PCI_Out;            
+    output wire [31:0] Instruction, PCI;            
     
     ProgramCounter PC(
         .Address(PC_Src_Out),
         .PC(PC_Out),
-        .Reset(Rst),
-        .Clk(Clk)); 
+        .Reset(Reset),
+        .Clk(Clock)); 
         
     Adder PC_ADDER(
         .InA(PC_Out),
         .InB(32'd4),
-        .Out(PCI_Out));    
+        .Out(PCI));
     
     InstructionMemory IM(
         .Address(PC_Out),
-        .Instruction(IM_Out));
-                
-        
+        .Instruction(Instruction));
+
     Mux32Bit4To1 PC_Src_Mux(
         .Out(PC_Src_Out),
-        .In0(PCI_Out),
-        .In1(Br_ADD),
-        .In2(JumpMux),
+        .In0(PCI),
+        .In1(BranchDest),
+        .In2(JumpDest),
         .In3(32'b0),
-        .sel({JumpOr, Br_AND}));    
-    
+        .sel({Jump, Branch}));    
 endmodule

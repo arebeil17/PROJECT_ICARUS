@@ -8,22 +8,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MEM_STAGE();
+module MEM_STAGE(Clock, Reset, WriteData, ReadData, WriteAddress, MemRead, MemWrite, ByteSel);
+    input Clock, Reset, MemRead, MemWrite;
+    input [1:0] ByteSel;
+    input [31:0] WriteData, WriteAddress;
     
-    
-    
-    AND BranchAnd(
-        .InA(ALU_Zero),
-        .InB(Branch),
-        .Out(BranchAnd_Out));
+    output [31:0] ReadData;
     
     DataMemory DM(
-        .Address(ALU_Out),
-        .WriteData(RF_RD2),
+        .Address(WriteAddress),
+        .WriteData(WriteData),
         .ByteSel(ByteSel),
-        .Clk(ClkOut),
+        .Clock(Clock),
         .MemWrite(MemWrite),
         .MemRead(MemRead),
-        .ReadData(DM_Out));
+        .ReadData(ReadData));
         
 endmodule

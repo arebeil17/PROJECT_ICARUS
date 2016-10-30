@@ -8,93 +8,75 @@
 // Project Name: 
 //////////////////////////////////////////////////////////////////////////////////
 
-module STAGE_REG_2(Clk, Rst, IM, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, SignExt, JumpMuxSel, ByteSel, RegDst, ALUOp, SE, RF_RD1, RF_RD2, PCI, 
-                             IM_Out, RegWrite_Out, ALUSrc_Out, MemWrite_Out, MemRead_Out, Branch_Out, MemToReg_Out, SignExt_Out, JumpMuxSel_Out, ByteSel_Out, RegDst_Out, ALUOp_Out, SE_Out, RF_RD1_Out, RF_RD2_Out, PCI_Out);
+module IDEX_Reg(
+    // Control Inputs
+    Clock, Reset, WriteEnable, Jump_In, RegWrite_In, ALUSrc_In, MemWrite_In, MemRead_In, Branch_In, MemToReg_In, JumpMuxSel_In, ByteSel_In, RegDst_In, ALUOp_In,
+    // Data Inputs
+    Instruction_In,  SE_In, RF_RD1_In, RF_RD2_In, PCI_In, 
+    // Control Output(s)
+    Jump_Out, RegWrite_Out, ALUSrc_Out, MemWrite_Out, MemRead_Out, Branch_Out, MemToReg_Out, JumpMuxSel_Out, ByteSel_Out, RegDst_Out, ALUOp_Out,
+    // Outputs
+    Instruction_Out, SE_Out, RF_RD1_Out, RF_RD2_Out, PCI_Out);
 
-    input Clk, Rst;
+    input Clock, Reset, WriteEnable;
     
     //-----------STAGE REG INTPUTS-------------------- 
     //Control Signal Inputs
-    input  RegWrite, 
-           ALUSrc, 
-           MemWrite, 
-           MemRead, 
-           Branch, 
-           MemToReg, 
-           SignExt, 
-           JumpMuxSel;           
+    input  RegWrite_In, ALUSrc_In, MemWrite_In, MemRead_In, Branch_In, JumpMuxSel_In, Jump_In;           
     
-    input [1:0] ByteSel, RegDst;   
+    input [1:0] ByteSel_In, RegDst_In, MemToReg_In;   
     
-    input [4:0] ALUOp;
+    input [4:0] ALUOp_In;
     
-    //Datapath pass-through inputs
-    input [31:0] IM,
-                 SE, 
-                 RF_RD1, 
-                 RF_RD2, 
-                 PCI;
+    input [31:0] Instruction_In, SE_In, RF_RD1_In, RF_RD2_In, PCI_In;
+    
     //-----------STAGE REG OUTPUTS--------------------                        
     //Control Signal Outputs            
-    output reg  RegWrite_Out, 
-                ALUSrc_Out, 
-                MemWrite_Out, 
-                MemRead_Out, 
-                Branch_Out, 
-                MemToReg_Out, 
-                SignExt_Out, 
-                JumpMuxSel_Out;           
+    output reg  RegWrite_Out, ALUSrc_Out, MemWrite_Out, MemRead_Out, Branch_Out, JumpMuxSel_Out, Jump_Out;           
      
-     output reg [1:0] ByteSel_Out, RegDst_Out;   
+    output reg [1:0] ByteSel_Out, RegDst_Out, MemToReg_Out;
      
-     output reg [4:0] ALUOp_Out;
-     
-     //Datapath pass-through Outputs
-     output reg [31:0] IM_Out,
-                       SE_Out, 
-                       RF_RD1_Out, 
-                       RF_RD2_Out, 
-                       PCI_Out;  
-     
-     always @(posedge Clk) begin
-        
-        if(Rst) begin
-            IM_Out         <= 0;
-            RegWrite_Out   <= 0; 
-            ALUSrc_Out     <= 0;
-            MemWrite_Out   <= 0; 
-            MemRead_Out    <= 0; 
-            Branch_Out     <= 0; 
-            MemToReg_Out   <= 0; 
-            SignExt_Out    <= 0; 
-            JumpMuxSel_Out <= 0; 
-            ByteSel_Out    <= 0; 
-            RegDst_Out     <= 0; 
-            ALUOp_Out      <= 0; 
-            SE_Out         <= 0; 
-            RF_RD1_Out     <= 0; 
-            RF_RD2_Out     <= 0; 
-            PCI_Out        <= 0;
-        end else begin
-            IM_Out         <= IM;
-            RegWrite_Out   <= RegWrite; 
-            ALUSrc_Out     <= ALUSrc;
-            MemWrite_Out   <= MemWrite; 
-            MemRead_Out    <= MemRead; 
-            Branch_Out     <= Branch; 
-            MemToReg_Out   <= MemToReg; 
-            SignExt_Out    <= SignExt; 
-            JumpMuxSel_Out <= JumpMuxSel; 
-            ByteSel_Out    <= ByteSel; 
-            RegDst_Out     <= RegDst; 
-            ALUOp_Out      <= ALUOp; 
-            SE_Out         <= SE; 
-            RF_RD1_Out     <= RF_RD1; 
-            RF_RD2_Out     <= RF_RD2; 
-            PCI_Out        <= PCI;
-        end
-     
-     end       
+    output reg [4:0] ALUOp_Out;
     
-
+    output reg [31:0] Instruction_Out, SE_Out, PCI_Out, RF_RD1_Out, RF_RD2_Out;
+     
+    always @(posedge Clock) begin
+        if(Reset) begin
+            RegWrite_Out    <= 0; 
+            ALUSrc_Out      <= 0;
+            MemWrite_Out    <= 0; 
+            MemRead_Out     <= 0; 
+            Branch_Out      <= 0; 
+            MemToReg_Out    <= 0; 
+            JumpMuxSel_Out  <= 0; 
+            ByteSel_Out     <= 0; 
+            RegDst_Out      <= 0; 
+            ALUOp_Out       <= 0;
+            PCI_Out         <= 0;
+            RF_RD1_Out      <= 0;
+            RF_RD2_Out      <= 0;
+            SE_Out          <= 0;
+            Jump_Out        <= 0;
+            Instruction_Out <= 0;
+        end else begin
+            if(WriteEnable) begin
+                RegWrite_Out    <= RegWrite_In; 
+                ALUSrc_Out      <= ALUSrc_In;
+                MemWrite_Out    <= MemWrite_In; 
+                MemRead_Out     <= MemRead_In; 
+                Branch_Out      <= Branch_In; 
+                MemToReg_Out    <= MemToReg_In; 
+                JumpMuxSel_Out  <= JumpMuxSel_In; 
+                ByteSel_Out     <= ByteSel_In; 
+                RegDst_Out      <= RegDst_In; 
+                ALUOp_Out       <= ALUOp_In;
+                PCI_Out         <= PCI_In;
+                RF_RD1_Out      <= RF_RD1_In;
+                RF_RD2_Out      <= RF_RD2_In;
+                SE_Out          <= SE_In;
+                Jump_Out        <= Jump_In;
+                Instruction_Out <= Instruction_In;
+            end
+        end
+     end       
 endmodule

@@ -35,11 +35,11 @@
 // of the "Address" input to index any of the 256 words. 
 ////////////////////////////////////////////////////////////////////////////////
 
-module DataMemory(Address, WriteData, ByteSel, Clk, MemWrite, MemRead, ReadData); 
+module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadData); 
 
     input [31:0] Address; 	// Input Address 
     input [31:0] WriteData; // Data to be Written into the Address 
-    input Clk;              // Clock Signal
+    input Clock;              // Clock Signal
     input MemWrite; 		// Control Signal for Memory Write 
     input MemRead; 			// Control Signal for Memory Read 
     input [1:0] ByteSel;    // 00 for SW/LW 
@@ -59,7 +59,7 @@ module DataMemory(Address, WriteData, ByteSel, Clk, MemWrite, MemRead, ReadData)
         memory[5] <= -32'd1;
     end
 
-    always @(posedge Clk) begin
+    always @(posedge Clock) begin
         if(MemWrite == 1) begin
             if(ByteSel == 'b00) begin // For LW
                 if(Address[1:0] == 'b00) //These byte indexing bits must be 00 for sw

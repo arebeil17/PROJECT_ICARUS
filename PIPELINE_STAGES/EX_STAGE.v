@@ -8,54 +8,77 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module EX_STAGE(Clk, Rst);
+module EX_STAGE(Clock, Reset, Instruction, PCI, RF_RD1, RF_RD2, ALUResult, SE_In, RegDest, RegWrite, ALUSrc, Zero, Jump, ALUOp, RegDst, BranchDest, JumpDest, JumpMuxControl);
+    input Clock, Reset, ALUSrc, JumpMuxControl;
+    input [1:0] RegDst;
+    input [4:0] ALUOp;
+    input [31:0] Instruction, PCI, RF_RD1, RF_RD2, SE_In;
     
-    input Clk, Rst;     
-     
-     ShiftLeft JumpShift(
-        .In({8'b0,IM_Out[25:0]}),
+    output RegWrite, Zero, Jump;
+    output [31:0] ALUResult, RegDest, BranchDest, JumpDest;
+    
+    wire [63:0] HiLoWrite, HiLoRead;
+    wire [31:0] BranchShift_Out, ALUSrc_Out, JumpShift_Out;
+    wire [5:0] ALUControl;
+    
+    ShiftLeft JumpShift(
+        .In({8'b0,Instruction[25:0]}),
         .Out(JumpShift_Out),
         .Shift(32'd2));
-     
-     Adder BranchAdder(
-        .InA(PCI_Out),
+        
+    Mux32Bit2To1 JumpMux(
+        .In0({PCI[31:28],JumpShift_Out[27:0]}),
+        .In1(RF_RD1),
+        .Out(JumpDest),
+        .sel(JumpMuxControl));
+    
+    Adder BranchAdder(
+        .InA(PCI),
         .InB(BranchShift_Out),
-        .Out(BranchAdd_Out));
+        .Out(BranchDest));
      
-     ShiftLeft BranchShift(
-        .In(SE_Out),
+    ShiftLeft BranchShift(
+        .In(SE_In),
         .Out(BranchShift_Out),
         .Shift(32'd2));
 
-     ALU_Controller ALUController(
-        .Rst(Rst),
+    ALU_Controller ALUController(
+        .Reset(Reset),
         .AluOp(ALUOp),
-        .Funct(IM_Out[5:0]),
+        .Funct(Instruction[5:0]),
         .ALUControl(ALUControl));
         
-     Mux32Bit2To1 ALUSrcMux(
+    Mux32Bit2To1 ALUSrcMux(
         .Out(ALUSrc_Out),
         .In0(RF_RD2),
-        .In1(SE_Out),
+        .In1(SE_In),
         .sel(ALUSrc));
      
-     ALU32Bit ALU(
+    ALU32Bit ALU(
         .ALUControl(ALUControl),
         .A(RF_RD1),
         .B(ALUSrc_Out),
-        .Shamt(IM_Out[10:6]),
-        .ALUResult(ALU_Out),
-        .Zero(ALU_Zero),
+        .Shamt(Instruction[10:6]),
+        .ALUResult(ALUResult),
+        .Zero(Zero),
         .HiLoEn(HiLoEn),
         .HiLoWrite(HiLoWrite), 
         .HiLoRead(HiLoRead),
-        .RegWrite(ALU_RegWrite),
-        .Jump(ALU_Jump));
+        .RegWrite(RegWrite),
+        .Jump(Jump));
      
-     HiLoRegister HiLo(
+    HiLoRegister HiLo(
         .WriteEnable(HiLoEn) , 
         .WriteData(HiLoWrite), 
         .HiLoReg(HiLoRead), 
-        .Clk(ClkOut), 
-        .Reset(Rst));
+        .Clock(Clock), 
+        .Reset(Reset));
+        
+    Mux32Bit4To1 RegDstMux(
+        .In0(Instruction[15:11]),
+        .In1(Instruction[20:16]),
+        .In2(32'b11111),
+        .In3(32'b0),
+        .Out(RegDest),
+        .sel(RegDst));
 endmodule
