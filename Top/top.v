@@ -100,7 +100,7 @@ module top(Clk, Rst, out7, en_out, ClkOut);
     
     // Controller(s)
     ALU_Controller ALUController(
-        .Rst(Rst),
+        .Reset(Rst),
         .AluOp(ALUOp),
         .Funct(IM_Out[5:0]),
         .ALUControl(ALUControl));

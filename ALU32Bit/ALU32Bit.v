@@ -112,6 +112,11 @@ module ALU32Bit(ALUControl, A, B, Shamt, ALUResult, Zero, HiLoEn, HiLoWrite, HiL
     reg [31:0] temp_1 = 0, temp_2 = 0;
     reg [63:0] temp64 = 0;
     
+    initial begin
+        Jump <= 0;
+        ALUResult <= 32'b0;
+    end
+    
     always @(*) begin
         HiLoEn = 0;
         case(Operation)

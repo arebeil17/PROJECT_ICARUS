@@ -80,7 +80,6 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .JumpDest(EX_JumpDest_Out),
         .WriteEnable(ID_PCWriteEnable_Out),
         // Data Input(s)
-        .PCI_In(IDEX_PCI_Out),
         // Data Output(s)
         .Instruction(IF_Instruction_Out),
         .PCI_Out(IF_PCI_Out));
@@ -133,7 +132,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .Clock(ClkOut),
         .Reset(Rst),
         .WriteEnable(ID_WriteEnable_Out[1]),
-        .WriteEnable_In(ID_WriteEnable_Out[3:2]),
+        .WriteEnable_In(ID_WriteEnable_Out[2:0]),
         .Jump_In(ID_Jump_Out),
         .RegWrite_In(ID_RegWrite_Out),
         .ALUSrc_In(ID_ALUSrc_Out),

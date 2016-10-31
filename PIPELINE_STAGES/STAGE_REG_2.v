@@ -32,7 +32,12 @@ module IDEX_Reg(
     output reg [1:0] ByteSel_Out, RegDestMuxControl_Out, MemToReg_Out, WriteEnable_Out;
     output reg [4:0] ALUOp_Out;
     output reg [31:0] Instruction_Out, SE_Out, PCI_Out, RF_RD1_Out, RF_RD2_Out;
-     
+    
+    initial begin
+        Jump_Out <= 0;
+        Branch_Out <= 0;
+    end
+    
     always @(posedge Clock) begin
         if(Reset) begin
             RegWrite_Out            <= 0; 

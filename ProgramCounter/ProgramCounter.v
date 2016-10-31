@@ -24,23 +24,25 @@
  // location, 0x00000000H).
  ////////////////////////////////////////////////////////////////////////////////
  
- module ProgramCounter(Address, PC, Reset, Clock, WriteEnable);
+ module ProgramCounter(NewPC, PC, Reset, Clock, WriteEnable);
  
- 	input [31:0] Address;
+ 	input [31:0] NewPC;
  	input Reset, Clock, WriteEnable;
  
- 	output reg [31:0] PC = 0;
- 	
- 	reg hold = 0; //Used after reset to stabilze PC
-     
-     always @(posedge Clock, posedge Reset) begin
-         if(Reset == 1)begin
-             PC <= 0;
-         end else if(Address > 228)begin
-             PC <= 0;
-         end else if(WriteEnable) begin
-             PC <= Address;
-         end
-     end
+ 	output reg [31:0] PC;
+    
+    initial begin
+        PC <= 0;
+    end
+    
+    always @(posedge Clock/*, posedge Reset*/) begin
+        if(Reset == 1)begin
+            PC <= 0;
+        end else if(NewPC > 52)begin
+            PC <= 0;
+        end else if(WriteEnable) begin
+            PC <= NewPC;
+        end
+    end
  
  endmodule

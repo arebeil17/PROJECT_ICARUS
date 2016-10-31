@@ -35,7 +35,12 @@ module DatapathController(OpCode, RegDest, RegWrite, AluSrc, AluOp, MemWrite, Me
                     OP_101011 = 'b101011;   // SW
 
     reg [5:0] State = INITIAL;
-     
+    
+    initial begin
+        Jump <= 0;
+        Branch <= 0;
+    end
+    
     //always @(change of any input)begin
     always @ (*) begin
         case(State)

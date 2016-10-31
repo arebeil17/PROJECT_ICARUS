@@ -32,9 +32,15 @@ module HazardDetectionUnit(
     
     output reg PC_WriteEnable, IFID_WriteEnable, WriteEnableMuxControl;
     
-    always @(*) begin
+    initial begin
         PC_WriteEnable <= 1;
         IFID_WriteEnable <= 1;
         WriteEnableMuxControl <= 1;
+    end
+    
+    always @(*) begin
+        //PC_WriteEnable <= 1;
+        //IFID_WriteEnable <= 1;
+        //WriteEnableMuxControl <= 1;
     end
 endmodule

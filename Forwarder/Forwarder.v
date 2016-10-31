@@ -36,8 +36,11 @@ module Forwarder(
     
     output reg [1:0] FWMuxAControl, FWMuxBControl;
     
-    always @(*) begin
+    initial begin
         FWMuxAControl <= 2'b00;
         FWMuxBControl <= 2'b00;
+    end
+    
+    always @(*) begin
     end
 endmodule

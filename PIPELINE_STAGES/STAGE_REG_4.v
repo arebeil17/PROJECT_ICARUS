@@ -21,8 +21,9 @@
 
 
 module MEMWB_Reg(
+    Clock, Reset,
     // Control Input(s)
-    Clock, Reset, WriteEnable, MemToReg_In, RegDest_In, RegWrite_In,
+    WriteEnable, MemToReg_In, RegDest_In, RegWrite_In,
     // Data Input(s)
     ALUResult_In, PCI_In, ReadData_In,  
     // Control Output(s)
@@ -35,7 +36,7 @@ module MEMWB_Reg(
     input [4:0] RegDest_In;
     input [31:0] ALUResult_In, PCI_In, ReadData_In;
     
-    output reg  RegWrite_Out;
+    output reg RegWrite_Out;
     output reg [1:0] MemToReg_Out;
     output reg [4:0] RegDest_Out;
     output reg [31:0] ALUResult_Out, PCI_Out, ReadData_Out;
