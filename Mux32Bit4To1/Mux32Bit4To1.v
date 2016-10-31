@@ -10,10 +10,7 @@
 module Mux32Bit4To1(Out, In0, In1, In2, In3, sel);
     output reg [31:0] Out;
     
-    input [31:0] In0;
-    input [31:0] In1;
-    input [31:0] In2;
-    input [31:0] In3;
+    input [31:0] In0, In1, In2, In3;
     input [1:0]sel;
     
     always @(*) begin

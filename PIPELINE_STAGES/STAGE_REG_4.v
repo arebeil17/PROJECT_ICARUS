@@ -32,11 +32,13 @@ module MEMWB_Reg(
     
     input Clock, Reset, WriteEnable, RegWrite_In;
     input [1:0] MemToReg_In;
-    input [31:0] ALUResult_In, PCI_In, ReadData_In, RegDest_In;
+    input [4:0] RegDest_In;
+    input [31:0] ALUResult_In, PCI_In, ReadData_In;
     
     output reg  RegWrite_Out;
     output reg [1:0] MemToReg_Out;
-    output reg [31:0] ALUResult_Out, PCI_Out, ReadData_Out, RegDest_Out;
+    output reg [4:0] RegDest_Out;
+    output reg [31:0] ALUResult_Out, PCI_Out, ReadData_Out;
      
     always @(posedge Clock) begin
         if(Reset) begin

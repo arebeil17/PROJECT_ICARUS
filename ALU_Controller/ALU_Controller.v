@@ -3,11 +3,11 @@
 module ALU_Controller(Reset, AluOp, Funct, ALUControl);
 
     input Reset;
-    input [4:0] AluOp;           //5 bit AluOp code sent from controller 
+    input [4:0] AluOp;           // 5 bit AluOp code sent from controller 
     
-    input [5:0] Funct;           //6 bit Instruction function field
+    input [5:0] Funct;           // 6 bit Instruction function field
     
-    output reg [5:0] ALUControl; //6 bit output control signal sent to ALU
+    output reg [5:0] ALUControl; // 6 bit output control signal sent to ALU
     
     //Controller AluOp 5 bit inputs (also are the state encodings)
     localparam [4:0] ALUOP_DC 		= 'b00000, // DONT CARE
