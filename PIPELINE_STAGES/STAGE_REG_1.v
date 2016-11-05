@@ -26,7 +26,12 @@ module IFID_Reg(Clock, Reset, Flush , WriteEnable, Instruction_In, Instruction_O
     
     input [31:0] Instruction_In, PCI_In;
     
-    output reg [31:0] Instruction_Out = 0, PCI_Out = 0;
+    output reg [31:0] Instruction_Out, PCI_Out;
+    
+    initial begin
+        Instruction_Out <= 0;
+        PCI_Out <= 0;
+    end
     
     always @(posedge Clock) begin
         if(Reset || Flush) begin
