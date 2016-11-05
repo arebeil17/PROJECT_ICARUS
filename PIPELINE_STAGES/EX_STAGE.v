@@ -11,7 +11,7 @@
 module EX_STAGE(
     Clock, Reset, 
     // Control Input(s)
-    ALUSrc, JumpMuxControl, RegDestMuxControl, ALUOp, MEM_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable,
+    ALUSrc, JumpMuxControl, RegDestMuxControl, ALUOp, EXMEM_RegDest, MEMWB_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable,
     // Data Input(s)
     Instruction, PCI, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB,
     // Control Output(s)
@@ -21,7 +21,7 @@ module EX_STAGE(
     
     input Clock, Reset, ALUSrc, JumpMuxControl, EXMEM_WriteEnable, MEMWB_WriteEnable;
     input [1:0] RegDestMuxControl;
-    input [4:0] ALUOp, MEM_RegDest;
+    input [4:0] ALUOp, EXMEM_RegDest, MEMWB_RegDest;
     input [31:0] Instruction, PCI, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB;
     
     output RegWrite, Zero, Jump;
@@ -33,13 +33,15 @@ module EX_STAGE(
     wire [5:0] ALUControl;
     wire [1:0] FWMuxAControl, FWMuxBControl;
     
-    Forwarder Forwarder(
+    Forwarder ForwardUnit(
         .Clock(Clock),
         .Reset(Reset),
         .WriteEnableFromEXMEM(EXMEM_WriteEnable),
         .WriteEnableFromMEMWB(MEMWB_WriteEnable),
         .EX_Instruction(Instruction),
-        .RegDest(MEM_RegDest),
+        //.RegDest(MEM_RegDest),
+        .EXMEM_WriteReg(EXMEM_RegDest), 
+        .MEMWB_WriteReg(MEMWB_RegDest),
         .FWMuxAControl(FWMuxAControl),
         .FWMuxBControl(FWMuxBControl));
         

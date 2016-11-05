@@ -183,7 +183,8 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Control Input(s)
         .ALUSrc(IDEX_ALUSrc_Out),
         .Instruction(IDEX_Instruction_Out),
-        .MEM_RegDest(EXMEM_RegDest_Out),
+        .EXMEM_RegDest(EXMEM_RegDest_Out), 
+        .MEMWB_RegDest(MEMWB_RegDest_Out),
         .ALUOp(IDEX_ALUOp_Out),
         .RegDestMuxControl(IDEX_RegDestMuxControl_Out),
         .JumpMuxControl(IDEX_JumpMuxSel_Out),
