@@ -29,6 +29,10 @@ module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, P
         .InB(32'd4),
         .Out(PCI_Out));
     
+    //BranchPredictor BP(
+    //    .PC(PC_Out),
+    //    .NextPC(PCI_Out));
+    
     InstructionMemory IM(
         .Address(PC_Out),
         .Instruction(Instruction));
