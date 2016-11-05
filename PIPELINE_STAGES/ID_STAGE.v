@@ -16,7 +16,7 @@ module ID_STAGE(
     // Control Output(s)
     ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, JumpMuxSel, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFID_WriteEnable, WriteEnable_Out, 
     // Outputs
-    SE_Out, RF_RD1, RF_RD2);
+    SE_Out, RF_RD1, RF_RD2, IFID_Flush);
 
     input Clock, Reset, RegWrite_In, EXMEM_WriteEnable;
     input [31:0] Instruction, EX_Instruction_In, WriteData;
@@ -25,7 +25,7 @@ module ID_STAGE(
     output wire [31:0] SE_Out, RF_RD1, RF_RD2;
          
     //Control Signal Outputs
-    output RegWrite, ALUSrc, MemWrite, MemRead, Branch, JumpMuxSel, Jump, PC_WriteEnable, IFID_WriteEnable;
+    output RegWrite, ALUSrc, MemWrite, MemRead, Branch, JumpMuxSel, Jump, PC_WriteEnable, IFID_WriteEnable, IFID_Flush;
     output [1:0] ByteSel, RegDestMuxControl, MemToReg;      
     output [4:0] ALUOp;
     output [31:0] WriteEnable_Out;
@@ -67,7 +67,8 @@ module ID_STAGE(
         .Jump(Jump),
         .JumpMux(JumpMuxSel),
         .ByteSel(ByteSel),
-        .StageWriteEnable(WriteEnable));
+        .StageWriteEnable(WriteEnable),
+        .IFID_Flush(IFID_Flush));
                
      RegisterFile RF(
         .ReadRegister1(Instruction[25:21]),

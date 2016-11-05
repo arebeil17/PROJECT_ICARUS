@@ -129,7 +129,7 @@ module RegisterFile(ReadRegister1, ReadRegister2, WriteRegister,
         registers[31] = 32'b00000000000000000000000000000000;
     end*/
 
-    always @(negedge Clk) begin
+    always @(posedge Clk) begin
         //if(~Reset)begin
             if(RegWrite)registers[WriteRegister] <= WriteData;
         //end

@@ -20,16 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module IFID_Reg(Clock, Reset, WriteEnable, Instruction_In, Instruction_Out, PCI_In, PCI_Out);
+module IFID_Reg(Clock, Reset, Flush , WriteEnable, Instruction_In, Instruction_Out, PCI_In, PCI_Out);
 
-    input Clock, Reset, WriteEnable;
+    input Clock, Reset, Flush, WriteEnable;
     
     input [31:0] Instruction_In, PCI_In;
     
     output reg [31:0] Instruction_Out = 0, PCI_Out = 0;
     
     always @(posedge Clock) begin
-        if(Reset) begin
+        if(Reset || Flush) begin
             PCI_Out <= 0;
             Instruction_Out <= 0;
         end else begin

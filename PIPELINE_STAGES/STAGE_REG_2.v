@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module IDEX_Reg(
-    Clock, Reset, WriteEnable,
+    Clock, Reset,  Flush, WriteEnable,
     // Control Input(s)
     Jump_In, RegWrite_In, ALUSrc_In, MemWrite_In, MemRead_In, Branch_In, MemToReg_In, JumpMuxSel_In, ByteSel_In, RegDestMuxControl_In, ALUOp_In, WriteEnable_In,
     // Data Inputs
@@ -19,7 +19,7 @@ module IDEX_Reg(
     // Outputs
     Instruction_Out, SE_Out, RF_RD1_Out, RF_RD2_Out, PCI_Out);
 
-    input Clock, Reset, WriteEnable;
+    input Clock, Reset, Flush, WriteEnable;
     
     //-----------STAGE REG INTPUTS-------------------- 
     input  RegWrite_In, ALUSrc_In, MemWrite_In, MemRead_In, Branch_In, JumpMuxSel_In, Jump_In;           
@@ -39,7 +39,7 @@ module IDEX_Reg(
     end
     
     always @(posedge Clock) begin
-        if(Reset) begin
+        if(Reset || Flush) begin
             RegWrite_Out            <= 0; 
             ALUSrc_Out              <= 0;
             MemWrite_Out            <= 0; 

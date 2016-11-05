@@ -31,6 +31,9 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     // IF Stage Output(s)
     wire [31:0] IF_Instruction_Out, IF_PCI_Out;
     
+    //IFID Stage Register Inputs
+    wire IFID_Flush;
+    
     // IFID Stage Register Output(s)
     wire [31:0] IFID_Instruction_Out, IFID_PCI_Out;
     
@@ -88,6 +91,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Inputs
         .Clock(ClkOut), 
         .Reset(Rst),
+        .Flush( IFID_Flush |  (IDEX_Branch_Out & EX_Zero_Out) | IDEX_Jump_Out),
         .WriteEnable(ID_IFIDWriteEnable_Out),
         .Instruction_In(IF_Instruction_Out),
         .PCI_In(IF_PCI_Out),
@@ -125,12 +129,14 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Data Output(s)
         .SE_Out(ID_SE_Out),
         .RF_RD1(ID_RF_RD1_Out),
-        .RF_RD2(ID_RF_RD2_Out));
+        .RF_RD2(ID_RF_RD2_Out),
+        .IFID_Flush(IFID_Flush));
                   
      IDEX_Reg    IDEX_SR(
         // Control Inputs
         .Clock(ClkOut),
         .Reset(Rst),
+        .Flush(IDEX_Branch_Out & EX_Zero_Out),
         .WriteEnable(ID_WriteEnable_Out[1]),
         .WriteEnable_In(ID_WriteEnable_Out[2:0]),
         .Jump_In(ID_Jump_Out),

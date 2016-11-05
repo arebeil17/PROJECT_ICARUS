@@ -8,7 +8,7 @@ module PIPELINED_CPU_TOP_TB();
     wire [7:0] en_out;
     wire ClkOut;
 
-    PIPELINED_CPU_TOP PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
+    PIPELINED_CPU_TOP CPU_TEST(Clk, Rst, out7, en_out, ClkOut);
     
     always begin
         Clk <= 0;
