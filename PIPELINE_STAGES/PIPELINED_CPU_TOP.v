@@ -197,7 +197,6 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Control Output(s)
         .RegWrite(EX_ALURegWrite_Out),
         .Zero(EX_Zero_Out),
-        .Jump(EX_Jump_Out),
         // Data Output(s)
         .ALUResult(EX_ALUResult_Out),
         .RegDest(EX_RegDest_Out),

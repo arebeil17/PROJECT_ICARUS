@@ -15,7 +15,7 @@ module EX_STAGE(
     // Data Input(s)
     PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB,
     // Control Output(s)
-    RegWrite, Zero, Jump, RegDest,
+    RegWrite, Zero, RegDest,
     // Data Output(s)
     ALUResult, BranchDest);
     
@@ -24,7 +24,7 @@ module EX_STAGE(
     input [4:0] ALUOp, EXMEM_RegDest, MEMWB_RegDest;
     input [31:0] PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB;
     
-    output RegWrite, Zero, Jump;
+    output RegWrite, Zero;
     output [4:0] RegDest;
     output [31:0] ALUResult, BranchDest;
     
@@ -93,8 +93,7 @@ module EX_STAGE(
         .HiLoEn(HiLoEn),
         .HiLoWrite(HiLoWrite), 
         .HiLoRead(HiLoRead),
-        .RegWrite(RegWrite),
-        .Jump(Jump));
+        .RegWrite(RegWrite));
      
     HiLoRegister HiLo(
         .WriteEnable(HiLoEn) , 
