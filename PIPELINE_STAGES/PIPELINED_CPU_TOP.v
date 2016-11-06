@@ -86,13 +86,13 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Data Input(s)
         // Data Output(s)
         .Instruction(IF_Instruction_Out),
-        .NewPC(IF_PC_Out));
+        .PC_Out(IF_PC_Out));
         
     IFID_Reg     IFID_SR(
         // Inputs
         .Clock(ClkOut), 
         .Reset(Rst),
-        .Flush( IFID_Flush |  (IDEX_Branch_Out & EX_Zero_Out) | ID_Jump_Out),
+        .Flush( IFID_Flush | (IDEX_Branch_Out & EX_Zero_Out) | ID_Jump_Out),
         .WriteEnable(ID_IFIDWriteEnable_Out),
         .Instruction_In(IF_Instruction_Out),
         .PC_In(IF_PC_Out),

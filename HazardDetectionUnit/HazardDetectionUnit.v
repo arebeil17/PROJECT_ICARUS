@@ -38,7 +38,7 @@ module HazardDetectionUnit(
         out <= 0;
     end
     
-    always @(*) begin
+    always @(ID_Instruction) begin
         if(MemReadFromIDEX) begin // Check if Last Command was LW
             if(EX_Instruction[20:16] == ID_Instruction[25:21] || 
                 EX_Instruction[20:16] == ID_Instruction[20:16]) begin

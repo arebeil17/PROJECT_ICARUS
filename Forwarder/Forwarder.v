@@ -53,11 +53,23 @@ module Forwarder(
         IDEX_RegRs <= EX_Instruction[25:21];
         IDEX_RegRt <= EX_Instruction[20:16];
         
+        FWMuxAControl <= 2'b00;
+        FWMuxBControl <= 2'b00;
+        
+        if(WriteEnableFromMEMWB) begin
+            if(IDEX_RegRs == MEMWB_WriteReg && IDEX_RegRs != 5'b00000)FWMuxAControl <= 2'b10;
+            if(IDEX_RegRt == MEMWB_WriteReg && IDEX_RegRt != 5'b00000)FWMuxBControl <= 2'b10;
+        end
+        if(WriteEnableFromEXMEM) begin
+            if(IDEX_RegRs == EXMEM_WriteReg && IDEX_RegRs != 5'b00000)FWMuxAControl <= 2'b01;
+            if(IDEX_RegRt == EXMEM_WriteReg && IDEX_RegRt != 5'b00000)FWMuxBControl <= 2'b01;
+        end
+/*        
         //Forwarding logic for MEM to EX
-         if( (EXMEM_WriteReg ==  IDEX_RegRs) || (EXMEM_WriteReg ==  IDEX_RegRt) ) begin
+         if((EXMEM_WriteReg == IDEX_RegRs) || (EXMEM_WriteReg ==  IDEX_RegRt)) begin
             //Forward from two different stages
             //Forward MEM to EX for A and WB to EX for B required 
-            if(((EXMEM_WriteReg == IDEX_RegRs) && (MEMWB_WriteReg == IDEX_RegRt)))begin
+            if((EXMEM_WriteReg == IDEX_RegRs) && (MEMWB_WriteReg == IDEX_RegRt))begin
                 FWMuxAControl <= 2'b01;
                 FWMuxBControl <= 2'b10;
             //Forward from two different stages    
@@ -97,6 +109,6 @@ module Forwarder(
         end else begin
             FWMuxAControl <= 2'b00;
             FWMuxBControl <= 2'b00;
-        end
+        end*/
     end
 endmodule

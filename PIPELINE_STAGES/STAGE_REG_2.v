@@ -47,7 +47,7 @@ module IDEX_Reg(
         RF_RD2_Out <= 32'b0;
         PC_Out <= 32'b0;
         SE_Out <= 32'b0;
-        WriteEnable_Out <= 0;
+        WriteEnable_Out <= 32'b0;
         ALUOp_Out <= 5'b0;
     end
     
@@ -62,7 +62,7 @@ module IDEX_Reg(
             ByteSel_Out             <= 0; 
             RegDestMuxControl_Out   <= 0; 
             ALUOp_Out               <= 0;
-            PC_Out                 <= 0;
+            PC_Out                  <= 0;
             RF_RD1_Out              <= 0;
             RF_RD2_Out              <= 0;
             SE_Out                  <= 0;

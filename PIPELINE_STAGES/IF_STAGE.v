@@ -7,15 +7,15 @@
 // Project Name: PROJECT_ICARUS
 //////////////////////////////////////////////////////////////////////////////////
 
-module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, NewPC, WriteEnable);
+module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, PC_Out, WriteEnable);
     
     input Clock, Reset, Jump, Branch, WriteEnable;
     input [31:0] JumpDest, BranchDest;
     
     //Internal wires
-    wire [31:0] PC_Out, PC_Src_Out, JumpMux_Out;
+    wire [31:0] NewPC, PC_Src_Out, JumpMux_Out;
     
-    output wire [31:0] Instruction, NewPC;            
+    output wire [31:0] Instruction, PC_Out;            
     
     ProgramCounter PC(
         .WriteEnable(WriteEnable),

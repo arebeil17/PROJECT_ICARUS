@@ -18,9 +18,8 @@ module PIPELINED_CPU_TOP_TB();
     end
     
     initial begin
-        //Rst <= 1;
-        #20 Rst <= 1;
-        #20 Rst <= 0;
+        #10 Rst <= 1;
+        #10 Rst <= 0;
     end
     
 endmodule

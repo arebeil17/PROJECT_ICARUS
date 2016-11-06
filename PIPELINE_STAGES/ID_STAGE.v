@@ -65,6 +65,7 @@ module ID_STAGE(
         .sel(Control_WriteEnableMux));
     
     DatapathController Controller(
+        .Clock(Clock),
         .OpCode(Instruction[31:26]),
         .Funct(Instruction[5:0]),
         .AluOp(ALUOp),
@@ -80,6 +81,9 @@ module ID_STAGE(
         .JumpMux(JumpMuxSel),
         .ByteSel(ByteSel),
         .StageWriteEnable(WriteEnable),
+        //.IDEXWriteEnable(),
+        //.EXMEMWriteEnable(),
+        //.MEMWBWriteEnable(),
         .IFID_Flush(IFID_Flush));
                
      RegisterFile RF(

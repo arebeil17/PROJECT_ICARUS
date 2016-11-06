@@ -1,6 +1,8 @@
 `timescale 1ns / 1ps
 
-module DatapathController(OpCode, Funct, RegDest, RegWrite, AluSrc, AluOp, MemWrite, MemRead, Branch, MemToReg, SignExt, Jump, JumpMux, ByteSel, StageWriteEnable, IFID_Flush);
+module DatapathController(Clock, OpCode, Funct, RegDest, RegWrite, AluSrc, AluOp, MemWrite, MemRead, Branch, MemToReg, SignExt, Jump, JumpMux, ByteSel, StageWriteEnable, IFID_Flush);
+    input Clock;
+    
     input[5:0] OpCode, Funct;
     
     output reg RegWrite, AluSrc, MemWrite, MemRead, Branch, SignExt, Jump, JumpMux;
@@ -44,7 +46,7 @@ module DatapathController(OpCode, Funct, RegDest, RegWrite, AluSrc, AluOp, MemWr
     end
     
     //always @(change of any input)begin
-    always @ (*) begin
+    always @ (negedge Clock) begin
         case(State)
             INITIAL: begin 
                 RegDest <= 2'b00; RegWrite <= 0; AluSrc <= 0; 
