@@ -194,6 +194,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .RF_RD1(IDEX_RF_RD1_Out),
         .RF_RD2(IDEX_RF_RD2_Out),
         .SE_In(IDEX_SE_Out),
+        .MEM_ReadData(MEM_ReadData_Out),
         // Control Output(s)
         .RegWrite(EX_ALURegWrite_Out),
         .Zero(EX_Zero_Out),

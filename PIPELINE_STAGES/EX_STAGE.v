@@ -13,7 +13,7 @@ module EX_STAGE(
     // Control Input(s)
     ALUSrc, RegDestMuxControl, ALUOp, EXMEM_RegDest, MEMWB_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable,
     // Data Input(s)
-    PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB,
+    PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB, MEM_ReadData,
     // Control Output(s)
     RegWrite, Zero, RegDest,
     // Data Output(s)
@@ -22,7 +22,7 @@ module EX_STAGE(
     input Clock, Reset, ALUSrc, EXMEM_WriteEnable, MEMWB_WriteEnable;
     input [1:0] RegDestMuxControl;
     input [4:0] ALUOp, EXMEM_RegDest, MEMWB_RegDest;
-    input [31:0] PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB;
+    input [31:0] PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB, MEM_ReadData;
     
     output RegWrite, Zero;
     output [4:0] RegDest;
@@ -49,7 +49,7 @@ module EX_STAGE(
         .In0(RF_RD1),
         .In1(FWFromMEM),
         .In2(FWFromWB),
-        .In3(32'b0),
+        .In3(MEM_ReadData),
         .Out(FWMuxA_Out),
         .sel(FWMuxAControl));
         
@@ -57,7 +57,7 @@ module EX_STAGE(
         .In0(ALUSrc_Out),
         .In1(FWFromMEM),
         .In2(FWFromWB),
-        .In3(32'b0),
+        .In3(MEM_ReadData),
         .Out(FWMuxB_Out),
         .sel(FWMuxBControl));
     

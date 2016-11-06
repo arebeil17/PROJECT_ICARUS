@@ -46,7 +46,7 @@ module Forwarder(
     // 00 = NO FORWARD
     // 01 = FORWARD MEM -> EX
     // 10 = FORWARD WB -> EX
-    // 11 = UNDEFINED
+    // 11 = FORWARD MEM_RD -> EX
     
     always @(*) begin
         //For readability
