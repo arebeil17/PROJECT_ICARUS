@@ -25,21 +25,34 @@ module EXMEM_Reg(
     // Control Input(s)
     MemRead_In, MemWrite_In,  ByteSel_In, WriteEnable_In,
     // Data Input(s)
-    ALUResult_In, MemToReg_In, PCI_In, RegDest_In, RegWrite_In, WriteData_In,
+    ALUResult_In, MemToReg_In, PC_In, RegDest_In, RegWrite_In, WriteData_In,
     // Control Output(s)
     MemRead_Out, MemWrite_Out, ByteSel_Out, WriteEnable_Out,
     // Data Output(s)
-    ALUResult_Out, MemToReg_Out, PCI_Out, RegDest_Out, RegWrite_Out, WriteData_Out);
+    ALUResult_Out, MemToReg_Out, PC_Out, RegDest_Out, RegWrite_Out, WriteData_Out);
     
     input Clock, Reset, WriteEnable, MemRead_In, MemWrite_In, RegWrite_In, WriteEnable_In;
     input [1:0] ByteSel_In, MemToReg_In;
     input [4:0] RegDest_In;
-    input [31:0] ALUResult_In, WriteData_In, PCI_In;
+    input [31:0] ALUResult_In, WriteData_In, PC_In;
     
     output reg MemRead_Out, MemWrite_Out, RegWrite_Out, WriteEnable_Out;
     output reg [1:0] ByteSel_Out, MemToReg_Out;
     output reg [4:0] RegDest_Out;
-    output reg [31:0] ALUResult_Out, WriteData_Out, PCI_Out;
+    output reg [31:0] ALUResult_Out, WriteData_Out, PC_Out;
+    
+    initial begin
+        ALUResult_Out <= 32'b0;
+        ByteSel_Out <= 2'b0;
+        MemToReg_Out <= 2'b0;
+        MemRead_Out <= 0;
+        MemWrite_Out <= 0;
+        PC_Out <= 32'b0;
+        RegDest_Out <= 5'b0;
+        RegWrite_Out <= 0;
+        WriteData_Out <= 32'b0;
+        WriteEnable_Out <= 0;
+    end
     
     always @(posedge Clock) begin
         if(Reset) begin
@@ -48,7 +61,7 @@ module EXMEM_Reg(
             MemToReg_Out        <= 0;
             MemRead_Out         <= 0;
             MemWrite_Out        <= 0;
-            PCI_Out             <= 0;
+            PC_Out             <= 0;
             RegDest_Out         <= 0;
             RegWrite_Out        <= 0;
             WriteData_Out       <= 0;
@@ -58,7 +71,7 @@ module EXMEM_Reg(
                 ALUResult_Out       <= ALUResult_In;
                 ByteSel_Out         <= ByteSel_In;
                 MemToReg_Out        <= MemToReg_In;
-                PCI_Out             <= PCI_In;
+                PC_Out              <= PC_In;
                 MemRead_Out         <= MemRead_In;
                 MemWrite_Out        <= MemWrite_In;
                 RegDest_Out         <= RegDest_In;

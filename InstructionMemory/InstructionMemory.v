@@ -43,7 +43,7 @@ module InstructionMemory(Address, Instruction);
     output [31:0] Instruction;    // Instruction at memory location Address
     
 	// Modify the size of the Instructions Array to Be The Total Lines of Code
-    reg [31:0] memory [19:0]; //Always check this after to change to IM
+    reg [31:0] memory [21:0]; //Always check this after to change to IM
     
     initial begin
         memory[0] = 32'b00100000000010010000000000000001;	//	main:	addi	$t1, $0, 1
@@ -65,7 +65,9 @@ module InstructionMemory(Address, Instruction);
         memory[16] = 32'b00000010100100011001100000100010;    //       sub    $s3, $s4, $s1
         memory[17] = 32'b00000010100100101001000000100010;    //       sub    $s2, $s4, $s2
         memory[18] = 32'b00000010011100101000100000100010;    //       sub    $s1, $s3, $s2
-        memory[19] = 32'b00001000000000000000000000000111;    //       j    loop
+        memory[19] = 32'b00001100000000000000000000000111;    //       jal    loop
+        memory[20] = 32'b00001000000000000000000000000111;    //       j      loop
+        memory[21] = 32'b00000000000000000000000000000000;    //       nop
 
     end
 

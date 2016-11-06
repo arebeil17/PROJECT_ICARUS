@@ -68,8 +68,8 @@ module ALU32Bit(ALUControl, A, B, Shamt, ALUResult, Zero, HiLoEn, HiLoWrite, HiL
 	input [4:0] Shamt;       //21bit from instruction used for selecting ROTR or SRL
     input [63:0] HiLoRead;
     
-    output reg HiLoEn = 0;
-    output reg [63:0] HiLoWrite = 0;
+    output reg HiLoEn;
+    output reg [63:0] HiLoWrite;
     output reg Jump, RegWrite;
 	output reg [31:0] ALUResult;	// answer
 	output Zero;	    // Zero=1 if ALUResult == 0
@@ -113,6 +113,8 @@ module ALU32Bit(ALUControl, A, B, Shamt, ALUResult, Zero, HiLoEn, HiLoWrite, HiL
     reg [63:0] temp64 = 0;
     
     initial begin
+        HiLoEn <= 0;
+        HiLoWrite <= 0;
         Jump <= 0;
         ALUResult <= 32'b0;
     end

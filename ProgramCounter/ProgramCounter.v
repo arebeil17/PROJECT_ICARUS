@@ -38,7 +38,7 @@
     always @(posedge Clock/*, posedge Reset*/) begin
         if(Reset == 1)begin
             PC <= 0;
-        end else if(NewPC > 76)begin
+        end else if(NewPC > 84)begin
             PC <= 0;
         end else if(WriteEnable) begin
             PC <= NewPC;

@@ -7,7 +7,7 @@
 // Project Name: PROJECT_ICARUS
 //////////////////////////////////////////////////////////////////////////////////
 
-module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, PCI_Out, WriteEnable);
+module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, NewPC, WriteEnable);
     
     input Clock, Reset, Jump, Branch, WriteEnable;
     input [31:0] JumpDest, BranchDest;
@@ -15,7 +15,7 @@ module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, P
     //Internal wires
     wire [31:0] PC_Out, PC_Src_Out, JumpMux_Out;
     
-    output wire [31:0] Instruction, PCI_Out;            
+    output wire [31:0] Instruction, NewPC;            
     
     ProgramCounter PC(
         .WriteEnable(WriteEnable),
@@ -27,11 +27,11 @@ module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, P
     Adder PC_ADDER(
         .InA(PC_Out),
         .InB(32'd4),
-        .Out(PCI_Out));
+        .Out(NewPC));
     
     //BranchPredictor BP(
     //    .PC(PC_Out),
-    //    .NextPC(PCI_Out));
+    //    .NextPC(NewPC));
     
     InstructionMemory IM(
         .Address(PC_Out),
@@ -39,7 +39,7 @@ module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, P
 
     Mux32Bit4To1 PC_Src_Mux(
         .Out(PC_Src_Out),
-        .In0(PCI_Out),
+        .In0(NewPC),
         .In1(BranchDest),
         .In2(JumpDest),
         .In3(32'b0),

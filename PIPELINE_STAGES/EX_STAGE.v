@@ -11,25 +11,25 @@
 module EX_STAGE(
     Clock, Reset, 
     // Control Input(s)
-    ALUSrc, JumpMuxControl, RegDestMuxControl, ALUOp, EXMEM_RegDest, MEMWB_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable,
+    ALUSrc, RegDestMuxControl, ALUOp, EXMEM_RegDest, MEMWB_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable,
     // Data Input(s)
-    Instruction, PCI, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB,
+    PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB,
     // Control Output(s)
     RegWrite, Zero, Jump, RegDest,
     // Data Output(s)
-    ALUResult, BranchDest, JumpDest);
+    ALUResult, BranchDest);
     
-    input Clock, Reset, ALUSrc, JumpMuxControl, EXMEM_WriteEnable, MEMWB_WriteEnable;
+    input Clock, Reset, ALUSrc, EXMEM_WriteEnable, MEMWB_WriteEnable;
     input [1:0] RegDestMuxControl;
     input [4:0] ALUOp, EXMEM_RegDest, MEMWB_RegDest;
-    input [31:0] Instruction, PCI, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB;
+    input [31:0] PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB;
     
     output RegWrite, Zero, Jump;
     output [4:0] RegDest;
-    output [31:0] ALUResult, BranchDest, JumpDest;
+    output [31:0] ALUResult, BranchDest;
     
     wire [63:0] HiLoWrite, HiLoRead;
-    wire [31:0] BranchShift_Out, ALUSrc_Out, JumpShift_Out, FWMuxA_Out, FWMuxB_Out;
+    wire [31:0] BranchShift_Out, ALUSrc_Out, FWMuxA_Out, FWMuxB_Out;
     wire [5:0] ALUControl;
     wire [1:0] FWMuxAControl, FWMuxBControl;
     
@@ -60,20 +60,9 @@ module EX_STAGE(
         .In3(32'b0),
         .Out(FWMuxB_Out),
         .sel(FWMuxBControl));
-        
-    ShiftLeft JumpShift(
-        .In({6'b0,Instruction[25:0]}),
-        .Out(JumpShift_Out),
-        .Shift(5'd2));
-        
-    Mux32Bit2To1 JumpMux(
-        .In0({PCI[31:28],JumpShift_Out[27:0]}),
-        .In1(RF_RD1),
-        .Out(JumpDest),
-        .sel(JumpMuxControl));
     
     Adder BranchAdder(
-        .InA(PCI),
+        .InA(PC),
         .InB(BranchShift_Out),
         .Out(BranchDest));
      

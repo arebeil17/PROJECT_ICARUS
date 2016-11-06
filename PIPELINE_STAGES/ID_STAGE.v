@@ -10,35 +10,35 @@
 module ID_STAGE(
     Clock, Reset,
     // Control Input(s)
-    RegWrite_In, EXMEM_WriteEnable,
+    RegWrite_In, IDEX_MemRead,
     // Data Input(s)
-    Instruction, EX_Instruction_In, WriteAddress, WriteData,  
+    EX_Instruction_In, Instruction, PC, WriteAddress, WriteData,  
     // Control Output(s)
-    ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, JumpMuxSel, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFID_WriteEnable, WriteEnable_Out, 
+    ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFID_WriteEnable, WriteEnable_Out, 
     // Outputs
-    SE_Out, RF_RD1, RF_RD2, IFID_Flush);
+    SE_Out, RF_RD1, RF_RD2, IFID_Flush, JumpDest);
 
-    input Clock, Reset, RegWrite_In, EXMEM_WriteEnable;
-    input [31:0] Instruction, EX_Instruction_In, WriteData;
+    input Clock, Reset, RegWrite_In, IDEX_MemRead;
     input [4:0] WriteAddress;
+    input [31:0] Instruction, EX_Instruction_In, WriteData, PC;
     //Output wires
     output wire [31:0] SE_Out, RF_RD1, RF_RD2;
          
     //Control Signal Outputs
-    output RegWrite, ALUSrc, MemWrite, MemRead, Branch, JumpMuxSel, Jump, PC_WriteEnable, IFID_WriteEnable, IFID_Flush;
+    output RegWrite, ALUSrc, MemWrite, MemRead, Branch, Jump, PC_WriteEnable, IFID_WriteEnable, IFID_Flush;
     output [1:0] ByteSel, RegDestMuxControl, MemToReg;      
     output [4:0] ALUOp;
-    output [31:0] WriteEnable_Out;
+    output [31:0] JumpDest, WriteEnable_Out;
     
-    wire SignExt, LoadMuxControl, Control_WriteEnableMux;
-    wire [31:0] WriteEnable;
+    wire SignExt, LoadMuxControl, Control_WriteEnableMux, JumpMuxSel;
+    wire [31:0] JumpShift_Out, WriteEnable;
     
     // Hazard Detection Unit
     HazardDetectionUnit HDU(
         //Control Input(s)
         .Clock(Clock),
         .Reset(Reset),
-        .EXMEM_WriteEnable(EXMEM_WriteEnable),
+        .MemReadFromIDEX(IDEX_MemRead),
         // Data Input(s)
         .ID_Instruction(Instruction),
         .EX_Instruction(EX_Instruction_In),
@@ -46,6 +46,17 @@ module ID_STAGE(
         .WriteEnableMuxControl(Control_WriteEnableMux),
         .PC_WriteEnable(PC_WriteEnable),
         .IFID_WriteEnable(IFID_WriteEnable));
+    
+    ShiftLeft JumpShift(
+        .In({6'b0,Instruction[25:0]}),
+        .Out(JumpShift_Out),
+        .Shift(5'd2));
+            
+    Mux32Bit2To1 JumpMux(
+        .In0({PC[31:28],JumpShift_Out[27:0]}),
+        .In1(RF_RD1),
+        .Out(JumpDest),
+        .sel(JumpMuxSel));
     
     Mux32Bit2To1 WriteEnableMux(
         .In0(32'b0),
@@ -55,6 +66,7 @@ module ID_STAGE(
     
     DatapathController Controller(
         .OpCode(Instruction[31:26]),
+        .Funct(Instruction[5:0]),
         .AluOp(ALUOp),
         .RegDest(RegDestMuxControl),
         .RegWrite(RegWrite),
