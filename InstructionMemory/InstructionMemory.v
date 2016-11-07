@@ -46,7 +46,7 @@ module InstructionMemory(Address, Instruction);
     reg [31:0] memory [62:0]; //Always check this after to change to IM
     
     initial begin
-        $readmemh ("Instruction_memory.txt", memory);
+        $readmemh ("Instruction_memory.hex", memory);
     end
 
     assign Instruction = memory[Address[31:2]];

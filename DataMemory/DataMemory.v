@@ -49,6 +49,7 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
     output reg [31:0] ReadData; // Contents of memory location at Address
 
     reg [31:0] memory [0:255]; // 256x32 Registers
+    integer i = 0;
     
     initial begin
         memory[0] <= 32'd100;
@@ -63,6 +64,10 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
         memory[9] <= 32'd1000; 
         memory[10] <= 32'd1100;
         memory[11] <= 32'd1200;
+        
+        for(i = 12; i < 255; i = i + 1) begin
+            memory[i] = 0;
+        end
     end
 
     always @(posedge Clock) begin
