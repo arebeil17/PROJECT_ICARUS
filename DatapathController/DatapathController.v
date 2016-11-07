@@ -45,8 +45,8 @@ module DatapathController(Clock, OpCode, Funct, RegDest, RegWrite, AluSrc, AluOp
         Jump <= 0;
     end
     
-    //always @(change of any input)begin
-    always @ (negedge Clock) begin
+    always @ (*) begin
+        //#5
         case(State)
             INITIAL: begin 
                 RegDest <= 2'b00; RegWrite <= 0; AluSrc <= 0; 
@@ -76,14 +76,14 @@ module DatapathController(Clock, OpCode, Funct, RegDest, RegWrite, AluSrc, AluOp
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00000;
                 Jump <= 1; JumpMux <= 0; ByteSel <= 2'b00;
-                StageWriteEnable <= 3'b111; IFID_Flush <= 1;
+                StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_000011: begin // JAL - NOT IMPLEMENTED
                 RegDest <= 2'b10; RegWrite <= 1; AluSrc <= 0; 
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
                 MemToReg <= 2'b10; SignExt <= 1; AluOp <= 'b00000;
                 Jump <= 1; JumpMux <= 0; ByteSel <= 2'b00;
-                StageWriteEnable <= 3'b111; IFID_Flush <= 1;
+                StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_000100: begin // BEQ
                 RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 0;

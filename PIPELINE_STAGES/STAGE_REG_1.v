@@ -28,8 +28,6 @@ module IFID_Reg(Clock, Reset, Flush , WriteEnable, Instruction_In, Instruction_O
     
     output reg [31:0] Instruction_Out, PC_Out;
     
-    reg [31:0] Instruction, PC;
-    
     initial begin
         Instruction_Out <= 32'b0;
         PC_Out <= 32'b0;
@@ -37,8 +35,8 @@ module IFID_Reg(Clock, Reset, Flush , WriteEnable, Instruction_In, Instruction_O
     
     always @(posedge Clock) begin
         if(Reset || Flush) begin
-            PC_Out <= 0;
-            Instruction_Out <= 0;
+            Instruction_Out = 32'b0;
+            PC_Out = 32'b0;
         end else begin
             if(WriteEnable)begin
                 PC_Out <= PC_In;
@@ -46,5 +44,4 @@ module IFID_Reg(Clock, Reset, Flush , WriteEnable, Instruction_In, Instruction_O
             end
         end
     end
-    
 endmodule

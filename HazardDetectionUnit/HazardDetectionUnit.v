@@ -30,28 +30,34 @@ module HazardDetectionUnit(
     input Clock, Reset, MemReadFromIDEX;
     input [31:0] ID_Instruction, EX_Instruction;
     
-    output PC_WriteEnable, IFID_WriteEnable, WriteEnableMuxControl;
+    output reg PC_WriteEnable, IFID_WriteEnable, WriteEnableMuxControl;
     
-    reg out;
+    //reg out;
     
     initial begin
-        out <= 0;
+        PC_WriteEnable = 0;
+        IFID_WriteEnable = 0;
+        WriteEnableMuxControl = 0;
     end
     
-    always @(ID_Instruction) begin
+    always @(negedge Clock) begin
+        if(PC_WriteEnable == 0)PC_WriteEnable <= 1;
+        if(IFID_WriteEnable == 0)IFID_WriteEnable <= 1;
+        if(WriteEnableMuxControl == 0)WriteEnableMuxControl <= 1;
         if(MemReadFromIDEX) begin // Check if Last Command was LW
-            if(EX_Instruction[20:16] == ID_Instruction[25:21] || 
-                EX_Instruction[20:16] == ID_Instruction[20:16]) begin
-                out <= 0;
+            if(EX_Instruction[20:16] == ID_Instruction[25:21] || EX_Instruction[20:16] == ID_Instruction[20:16]) begin
+                PC_WriteEnable = 0;
+                IFID_WriteEnable = 0;
+                WriteEnableMuxControl = 0;
             end else begin
-                out <= 1;
+                PC_WriteEnable = 1;
+                IFID_WriteEnable = 1;
+                WriteEnableMuxControl = 1;
             end
         end else begin
-            out <= 1;
+            PC_WriteEnable = 1;
+            IFID_WriteEnable = 1;
+            WriteEnableMuxControl = 1;
         end
     end
-    
-    assign PC_WriteEnable = out;
-    assign IFID_WriteEnable = out;
-    assign WriteEnableMuxControl = out;
 endmodule

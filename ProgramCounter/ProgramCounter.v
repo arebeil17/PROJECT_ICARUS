@@ -41,11 +41,11 @@
     always @(posedge Clock, posedge Reset) begin
         if(Reset == 1)begin
             PC <= 0;
-            hold <= 1;
-        end else if(NewPC > 84)begin
+            //hold <= 1;
+        end else if(NewPC > 100)begin
             PC <= 0;
         end else if(hold) begin
-            hold <= 0;
+            //hold <= 0;
             PC <= PC;
         end else if(WriteEnable) begin
             PC <= NewPC;

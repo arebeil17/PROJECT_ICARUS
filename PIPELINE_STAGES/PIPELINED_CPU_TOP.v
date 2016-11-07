@@ -78,7 +78,6 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .Clock(ClkOut), 
         .Reset(Rst), 
         .Jump(ID_Jump_Out),
-        //.Jump(IDEX_Jump_Out | EX_Jump_Out), 
         .Branch(IDEX_Branch_Out & EX_Zero_Out), 
         .BranchDest(EX_BranchDest_Out), 
         .JumpDest(EX_JumpDest_Out),
@@ -92,7 +91,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Inputs
         .Clock(ClkOut), 
         .Reset(Rst),
-        .Flush( IFID_Flush | (IDEX_Branch_Out & EX_Zero_Out) | ID_Jump_Out),
+        .Flush( ID_Jump_Out | (IDEX_Branch_Out & EX_Zero_Out)),
         .WriteEnable(ID_IFIDWriteEnable_Out),
         .Instruction_In(IF_Instruction_Out),
         .PC_In(IF_PC_Out),

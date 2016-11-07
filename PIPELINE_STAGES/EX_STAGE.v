@@ -62,7 +62,7 @@ module EX_STAGE(
         .sel(FWMuxBControl));
     
     Adder BranchAdder(
-        .InA(PC),
+        .InA((PC+4)),
         .InB(BranchShift_Out),
         .Out(BranchDest));
      
