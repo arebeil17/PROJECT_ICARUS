@@ -43,10 +43,10 @@ module InstructionMemory(Address, Instruction);
     output [31:0] Instruction;    // Instruction at memory location Address
     
 	// Modify the size of the Instructions Array to Be The Total Lines of Code
-    reg [31:0] memory [62:0]; //Always check this after to change to IM
+    reg [31:0] memory [512:0]; //Always check this after to change to IM
     
     initial begin
-        $readmemh ("Instruction_memory.hex", memory);
+        $readmemh("Instruction_memory.txt", memory);
     end
 
     assign Instruction = memory[Address[31:2]];
