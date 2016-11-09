@@ -51,6 +51,7 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
     reg [31:0] memory [0:255]; // 256x32 Registers
     integer i = 0;
     
+    //initialize data memory
     initial begin
         memory[0] <= 32'd100;
         memory[1] <= 32'd200;
@@ -65,7 +66,7 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
         memory[10] <= 32'd1100;
         memory[11] <= 32'd1200;
         
-        for(i = 12; i < 255; i = i + 1) begin
+        for(i = 12; i < 256; i = i + 1) begin
             memory[i] = 0;
         end
     end
