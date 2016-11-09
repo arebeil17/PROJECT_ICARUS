@@ -54,7 +54,7 @@ module EX_STAGE(
         .sel(FWMuxAControl));
         
     Mux32Bit4To1 FWMuxB(
-        .In0(ALUSrc_Out),
+        .In0(RF_RD2),
         .In1(FWFromMEM),
         .In2(FWFromWB),
         .In3(MEM_ReadData),
@@ -79,14 +79,14 @@ module EX_STAGE(
         
     Mux32Bit2To1 ALUSrcMux(
         .Out(ALUSrc_Out),
-        .In0(RF_RD2),
+        .In0(FWMuxB_Out),
         .In1(SE_In),
         .sel(ALUSrc));
      
     ALU32Bit ALU(
         .ALUControl(ALUControl),
         .A(FWMuxA_Out),
-        .B(FWMuxB_Out),
+        .B(ALUSrc_Out),
         .Shamt(Instruction[10:6]),
         .ALUResult(ALUResult),
         .Zero(Zero),

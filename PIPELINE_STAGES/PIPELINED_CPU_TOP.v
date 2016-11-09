@@ -39,7 +39,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     
     // ID Stage Output(s)
     wire [31:0] ID_RF_RD1_Out, ID_RF_RD2_Out, ID_SE_Out, ID_WriteEnable_Out;
-    wire ID_RegWrite_Out, ID_ALUSrc_Out, ID_MemWrite_Out, ID_MemRead_Out, ID_Branch_Out, ID_SignExt_Out, ID_PCWriteEnable_Out, ID_IFIDWriteEnable_Out, ID_Jump_Out;
+    wire ID_HDUFlush_Out, ID_RegWrite_Out, ID_ALUSrc_Out, ID_MemWrite_Out, ID_MemRead_Out, ID_Branch_Out, ID_SignExt_Out, ID_PCWriteEnable_Out, ID_IFIDWriteEnable_Out, ID_Jump_Out;
     wire [4:0] ID_ALUOp_Out;
     wire [1:0] ID_ByteSel_Out, ID_RegDestMuxControl_Out, ID_MemToReg_Out;
     
@@ -126,6 +126,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .WriteEnable_Out(ID_WriteEnable_Out),
         .PC_WriteEnable(ID_PCWriteEnable_Out),
         .IFID_WriteEnable(ID_IFIDWriteEnable_Out),
+        .HDUFlush(ID_HDUFlush_Out),
         // Data Output(s)
         .SE_Out(ID_SE_Out),
         .RF_RD1(ID_RF_RD1_Out),
@@ -137,7 +138,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Control Inputs
         .Clock(ClkOut),
         .Reset(Rst),
-        .Flush(IDEX_Branch_Out & EX_Zero_Out),
+        .Flush(ID_HDUFlush_Out | (IDEX_Branch_Out & EX_Zero_Out)),
         .WriteEnable(ID_WriteEnable_Out[1]),
         .WriteEnable_In(ID_WriteEnable_Out[2:0]),
         .RegWrite_In(ID_RegWrite_Out),
@@ -156,7 +157,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .RF_RD1_In(ID_RF_RD1_Out),
         .RF_RD2_In(ID_RF_RD2_Out),
         // Control Outputs
-        .WriteEnable_Out(IDEX_WriteEnable_Out[3:2]),
+        //.WriteEnable_Out(/*IDEX_WriteEnable_Out[3:2]*/),
         .RegWrite_Out(IDEX_RegWrite_Out),
         .ALUSrc_Out(IDEX_ALUSrc_Out),
         .MemWrite_Out(IDEX_MemWrite_Out),
@@ -184,8 +185,8 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .MEMWB_RegDest(MEMWB_RegDest_Out),
         .ALUOp(IDEX_ALUOp_Out),
         .RegDestMuxControl(IDEX_RegDestMuxControl_Out),
-        .EXMEM_WriteEnable(IDEX_WriteEnable_Out[2]),
-        .MEMWB_WriteEnable(EXMEM_WriteEnable_Out),
+        .EXMEM_WriteEnable(EXMEM_RegWrite_Out),
+        .MEMWB_WriteEnable(MEMWB_RegWrite_Out),
         // Data Input(s)
         .PC(IDEX_PC_Out),
         .FWFromMEM(EXMEM_ALUResult_Out),

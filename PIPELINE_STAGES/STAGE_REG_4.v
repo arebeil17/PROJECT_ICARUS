@@ -59,14 +59,14 @@ module MEMWB_Reg(
             RegDest_Out         <= 0;
             RegWrite_Out        <= 0;
         end else begin
-            if(WriteEnable) begin
+            //if(WriteEnable) begin
                 ALUResult_Out       <= ALUResult_In;
                 MemToReg_Out        <= MemToReg_In;
                 PC_Out              <= PC_In;
                 ReadData_Out        <= ReadData_In;
                 RegDest_Out         <= RegDest_In;
                 RegWrite_Out        <= RegWrite_In;
-            end
+            //end
         end
     end
 endmodule

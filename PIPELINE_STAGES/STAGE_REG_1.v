@@ -36,7 +36,7 @@ module IFID_Reg(Clock, Reset, Flush , WriteEnable, Instruction_In, Instruction_O
     always @(posedge Clock) begin
         if(Reset || Flush) begin
             Instruction_Out = 32'b0;
-            PC_Out = 32'b0;
+            //PC_Out = 32'b0;
         end else begin
             if(WriteEnable)begin
                 PC_Out <= PC_In;

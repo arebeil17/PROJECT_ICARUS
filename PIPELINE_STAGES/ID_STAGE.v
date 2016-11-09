@@ -14,7 +14,7 @@ module ID_STAGE(
     // Data Input(s)
     EX_Instruction_In, Instruction, PC, WriteAddress, WriteData,  
     // Control Output(s)
-    ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFID_WriteEnable, WriteEnable_Out, 
+    HDUFlush, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFID_WriteEnable, WriteEnable_Out, 
     // Outputs
     SE_Out, RF_RD1, RF_RD2, IFID_Flush, JumpDest);
 
@@ -25,7 +25,7 @@ module ID_STAGE(
     output wire [31:0] SE_Out, RF_RD1, RF_RD2;
          
     //Control Signal Outputs
-    output RegWrite, ALUSrc, MemWrite, MemRead, Branch, Jump, PC_WriteEnable, IFID_WriteEnable, IFID_Flush;
+    output HDUFlush, RegWrite, ALUSrc, MemWrite, MemRead, Branch, Jump, PC_WriteEnable, IFID_WriteEnable, IFID_Flush;
     output [1:0] ByteSel, RegDestMuxControl, MemToReg;      
     output [4:0] ALUOp;
     output [31:0] JumpDest, WriteEnable_Out;
@@ -39,13 +39,15 @@ module ID_STAGE(
         .Clock(Clock),
         .Reset(Reset),
         .MemReadFromIDEX(IDEX_MemRead),
+        .MemReadFromID(MemRead),
         // Data Input(s)
         .ID_Instruction(Instruction),
         .EX_Instruction(EX_Instruction_In),
         // Control Output(s)
         .WriteEnableMuxControl(Control_WriteEnableMux),
         .PC_WriteEnable(PC_WriteEnable),
-        .IFID_WriteEnable(IFID_WriteEnable));
+        .IFID_WriteEnable(IFID_WriteEnable),
+        .Flush(HDUFlush));
     
     ShiftLeft JumpShift(
         .In({6'b0,Instruction[25:0]}),

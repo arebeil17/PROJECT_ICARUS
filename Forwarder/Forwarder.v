@@ -57,12 +57,16 @@ module Forwarder(
         FWMuxBControl <= 2'b00;
         
         if(WriteEnableFromMEMWB) begin
-            if(IDEX_RegRs == MEMWB_WriteReg && IDEX_RegRs != 5'b00000)FWMuxAControl <= 2'b10;
-            if(EX_Instruction[31:26] == 6'b000000)begin if(IDEX_RegRt == MEMWB_WriteReg && IDEX_RegRt != 5'b00000)FWMuxBControl <= 2'b10;end
+            if(IDEX_RegRs == MEMWB_WriteReg && IDEX_RegRs != 5'b00000) FWMuxAControl <= 2'b10;
+           // if(EX_Instruction[31:26] == 6'b000000)begin 
+                if(IDEX_RegRt == MEMWB_WriteReg /*&& IDEX_RegRt != 5'b00000*/) FWMuxBControl <= 2'b10;
+            //end
         end
         if(WriteEnableFromEXMEM) begin
             if(IDEX_RegRs == EXMEM_WriteReg && IDEX_RegRs != 5'b00000)FWMuxAControl <= 2'b01;
-            if(EX_Instruction[31:26] == 6'b000000)begin if(IDEX_RegRt == EXMEM_WriteReg && IDEX_RegRt != 5'b00000)FWMuxBControl <= 2'b01;end
+            //if(EX_Instruction[31:26] == 6'b000000)begin 
+                if(IDEX_RegRt == EXMEM_WriteReg && IDEX_RegRt != 5'b00000) FWMuxBControl <= 2'b01;
+            //end
         end
 /*        
         //Forwarding logic for MEM to EX

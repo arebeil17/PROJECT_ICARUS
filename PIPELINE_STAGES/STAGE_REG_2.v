@@ -69,7 +69,7 @@ module IDEX_Reg(
             Instruction_Out         <= 0;
             WriteEnable_Out         <= 0;
         end else begin
-            if(WriteEnable) begin
+            //if(WriteEnable) begin
                 RegWrite_Out            <= RegWrite_In; 
                 ALUSrc_Out              <= ALUSrc_In;
                 MemWrite_Out            <= MemWrite_In; 
@@ -85,7 +85,7 @@ module IDEX_Reg(
                 SE_Out                  <= SE_In;
                 Instruction_Out         <= Instruction_In;
                 WriteEnable_Out         <= WriteEnable_In;
-            end
+            //end
         end
      end       
 endmodule

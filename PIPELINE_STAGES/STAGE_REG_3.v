@@ -67,7 +67,7 @@ module EXMEM_Reg(
             WriteData_Out       <= 0;
             WriteEnable_Out     <= 0;
         end else begin
-            if(WriteEnable) begin
+            //if(WriteEnable) begin
                 ALUResult_Out       <= ALUResult_In;
                 ByteSel_Out         <= ByteSel_In;
                 MemToReg_Out        <= MemToReg_In;
@@ -78,7 +78,7 @@ module EXMEM_Reg(
                 RegWrite_Out        <= RegWrite_In;
                 WriteData_Out       <= WriteData_In;
                 WriteEnable_Out     <= WriteEnable_In;
-            end
+            //end
         end
     end 
 endmodule
