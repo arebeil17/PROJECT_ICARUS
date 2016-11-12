@@ -23,15 +23,15 @@
 module MEMWB_Reg(
     Clock, Reset,
     // Control Input(s)
-    WriteEnable, MemToReg_In, RegDest_In, RegWrite_In,
+    MemToReg_In, RegDest_In, RegWrite_In,
     // Data Input(s)
     ALUResult_In, PC_In, ReadData_In,  
     // Control Output(s)
-     MemToReg_Out, RegDest_Out, RegWrite_Out,
+    MemToReg_Out, RegDest_Out, RegWrite_Out,
     // Data Output(s)
     ALUResult_Out, PC_Out, ReadData_Out);
     
-    input Clock, Reset, WriteEnable, RegWrite_In;
+    input Clock, Reset, RegWrite_In;
     input [1:0] MemToReg_In;
     input [4:0] RegDest_In;
     input [31:0] ALUResult_In, PC_In, ReadData_In;
@@ -59,14 +59,12 @@ module MEMWB_Reg(
             RegDest_Out         <= 0;
             RegWrite_Out        <= 0;
         end else begin
-            //if(WriteEnable) begin
-                ALUResult_Out       <= ALUResult_In;
-                MemToReg_Out        <= MemToReg_In;
-                PC_Out              <= PC_In;
-                ReadData_Out        <= ReadData_In;
-                RegDest_Out         <= RegDest_In;
-                RegWrite_Out        <= RegWrite_In;
-            //end
+            ALUResult_Out       <= ALUResult_In;
+            MemToReg_Out        <= MemToReg_In;
+            PC_Out              <= PC_In;
+            ReadData_Out        <= ReadData_In;
+            RegDest_Out         <= RegDest_In;
+            RegWrite_Out        <= RegWrite_In;
         end
     end
 endmodule

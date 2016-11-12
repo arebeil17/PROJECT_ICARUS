@@ -207,8 +207,6 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Control Input(s)
         .Clock(ClkOut),
         .Reset(Rst),
-        .WriteEnable(IDEX_WriteEnable_Out[2]),
-        .WriteEnable_In(IDEX_WriteEnable_Out[3]),
         .MemToReg_In(IDEX_MemToReg_Out),
         .RegWrite_In(IDEX_RegWrite_Out & EX_ALURegWrite_Out),
         .MemRead_In(IDEX_MemRead_Out),
@@ -220,7 +218,6 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .WriteData_In(IDEX_RF_RD2_Out),
         .RegDest_In(EX_RegDest_Out),
         // Control Outputs
-        .WriteEnable_Out(EXMEM_WriteEnable_Out),
         .MemToReg_Out(EXMEM_MemToReg_Out),
         .RegWrite_Out(EXMEM_RegWrite_Out),
         .MemRead_Out(EXMEM_MemRead_Out),
@@ -240,7 +237,8 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .MemRead(EXMEM_MemRead_Out),
         .MemWrite(EXMEM_MemWrite_Out),
         .ByteSel(EXMEM_ByteSel_Out),
-        // Data Inputs
+        // Data Inputs\
+        .PC(EXMEM_PC_Out),
         .WriteData(EXMEM_WriteData_Out),
         .WriteAddress(EXMEM_ALUResult_Out),
         // Outputs
@@ -250,7 +248,6 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Control Input(s)
         .Clock(ClkOut),
         .Reset(Rst),
-        .WriteEnable(EXMEM_WriteEnable_Out),
         .MemToReg_In(EXMEM_MemToReg_Out),
         .RegWrite_In(EXMEM_RegWrite_Out),
         // Data Input(s)
