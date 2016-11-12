@@ -144,21 +144,21 @@ module DatapathController(Clock, OpCode, Funct, RegDest, RegWrite, AluSrc, AluOp
             OP_001100: begin // ANDI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
-                MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00100;
+                MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00100;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 StageWriteEnable <= 3'b111; IFID_Flush <= 0; 
             end
             OP_001101: begin // ORI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
-                MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00011;
+                MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00011;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 StageWriteEnable <= 3'b111; IFID_Flush <= 0; 
             end
             OP_001110: begin // XORI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
-                MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00101;
+                MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00101;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 StageWriteEnable <= 3'b111; IFID_Flush <= 0; 
             end

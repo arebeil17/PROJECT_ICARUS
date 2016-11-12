@@ -5,14 +5,21 @@
 // Module - SignExtension.v
 // Description - Sign extension module.
 ////////////////////////////////////////////////////////////////////////////////
-module SignExtension(In, Out);
-
-    /* A 16-Bit input word */
+module SignExtension(In, Out, Control);
+    // Control Input(s)
+    input Control;
+    // Data Input(s)
     input [15:0] In;
+    // Control Output(s)
+    // Data Output(s)
+    output reg [31:0] Out;
     
-    /* A 32-Bit output word */
-    output [31:0] Out;
-    
-    assign Out = (In[15] == 0) ? (In) : (In | 'hffff0000);
-
+    always @(*) begin
+        if(Control) begin
+            Out <= {{16{In[15]}},In};
+        end else begin
+            Out <= {{16{0}}, In};
+            //Out = (In[15] == 0) ? (In) : (In | 'hffff0000);
+        end
+    end
 endmodule

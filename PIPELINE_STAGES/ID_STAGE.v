@@ -100,6 +100,7 @@ module ID_STAGE(
         .Reset(Reset));
         
      SignExtension SE(
+        .Control(SignExt),
         .In(Instruction[15:0]),
         .Out(SE_Out));
 endmodule
