@@ -301,15 +301,15 @@ module ALU32Bit(ALUControl, A, B, Shamt, ALUResult, Zero, HiLoEn, HiLoWrite, HiL
                 RegWrite <= 0;
                 if(B == 0) begin //Perform BLTZ if rt = 0
                     if($signed(A) < 0)
-                        ALUResult <= 0;  //Branch triggered by Zero output
+                        ALUResult <= 1;  //Branch triggered by Zero output
                     else
-                        ALUResult <= 1;
+                        ALUResult <= 0;
                 end
                 else begin //else perform BGEZ if rt = 1
                       if($signed(A) >= 0)
-                          ALUResult <= 0; //Branch triggered by Zero output
+                          ALUResult <= 1; //Branch triggered by Zero output
                       else
-                          ALUResult <= 1;
+                          ALUResult <= 0;
                 end
             end
             BGTZ: begin

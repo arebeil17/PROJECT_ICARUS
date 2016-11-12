@@ -108,7 +108,7 @@ module RegisterFile(
     always @(negedge Clk, posedge Reset) begin
         if(Reset)begin
             registers[0] =  32'b00000000000000000000000000000000;
-            registers[1] =  32'b00000000000000000000000000000001;
+            registers[1] =  32'b00000000000000000000000000000000;
             registers[2] =  32'b00000000000000000000000000000000;
             registers[3] =  32'b00000000000000000000000000000000;
             registers[4] =  32'b00000000000000000000000000000000;

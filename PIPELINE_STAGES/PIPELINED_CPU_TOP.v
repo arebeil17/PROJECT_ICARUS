@@ -52,7 +52,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     // EX Stage Register Output(s)
     wire EX_ALURegWrite_Out, EX_Zero_Out, EX_Jump_Out;
     wire [4:0] EX_RegDest_Out;
-    wire [31:0] EX_ALUResult_Out, EX_BranchDest_Out, EX_JumpDest_Out;
+    wire [31:0] EX_ALUResult_Out, EX_BranchDest_Out, EX_JumpDest_Out, EX_WriteData_Out;
     
     //EXMEM Stage Register Output(s)
     wire EXMEM_RegWrite_Out, EXMEM_WriteEnable_Out, EXMEM_MemRead_Out, EXMEM_MemWrite_Out;
@@ -201,7 +201,8 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Data Output(s)
         .ALUResult(EX_ALUResult_Out),
         .RegDest(EX_RegDest_Out),
-        .BranchDest(EX_BranchDest_Out));
+        .BranchDest(EX_BranchDest_Out),
+        .FWMuxB_Out(EX_WriteData_Out));
     
     EXMEM_Reg EXMEM_SR(
         // Control Input(s)
@@ -215,7 +216,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         // Data Input(s)
         .ALUResult_In(EX_ALUResult_Out),
         .PC_In(IDEX_PC_Out),
-        .WriteData_In(IDEX_RF_RD2_Out),
+        .WriteData_In(EX_WriteData_Out),
         .RegDest_In(EX_RegDest_Out),
         // Control Outputs
         .MemToReg_Out(EXMEM_MemToReg_Out),

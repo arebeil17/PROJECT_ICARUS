@@ -17,7 +17,7 @@ module EX_STAGE(
     // Control Output(s)
     RegWrite, Zero, RegDest,
     // Data Output(s)
-    ALUResult, BranchDest);
+    ALUResult, BranchDest, FWMuxB_Out);
     
     input Clock, Reset, ALUSrc, EXMEM_WriteEnable, MEMWB_WriteEnable;
     input [1:0] RegDestMuxControl;
@@ -27,9 +27,10 @@ module EX_STAGE(
     output RegWrite, Zero;
     output [4:0] RegDest;
     output [31:0] ALUResult, BranchDest;
+    output wire [31:0] FWMuxB_Out;
     
     wire [63:0] HiLoWrite, HiLoRead;
-    wire [31:0] BranchShift_Out, ALUSrc_Out, FWMuxA_Out, FWMuxB_Out;
+    wire [31:0] BranchShift_Out, ALUSrc_Out, FWMuxA_Out;//, FWMuxB_Out;
     wire [5:0] ALUControl;
     wire [1:0] FWMuxAControl, FWMuxBControl;
     
