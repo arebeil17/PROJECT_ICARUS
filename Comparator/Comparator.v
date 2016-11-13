@@ -42,19 +42,19 @@ module Comparator(Clock, InA, InB, Result, Control);
             end
             BGEZ, BLTZ: begin
                 if(InB == 32'd0)begin
-                    Result <= (InA < 0) ? 1 : 0;
+                    Result <= ($signed(InA) < 0) ? 1 : 0;
                 end else if(InB == 32'd1) begin
-                    Result <= (InA >= 0) ? 1 : 0;
+                    Result <= ($signed(InA) >= 0) ? 1 : 0;
                 end
             end
             BGTZ: begin
-                Result <= (InA > InB) ? 1 : 0;
+                Result <= ($signed(InA) > $signed(InB)) ? 1 : 0;
             end
             BLEZ: begin
-                Result <= (InA <= InB) ? 1 : 0;
+                Result <= ($signed(InA) <= $signed(InB)) ? 1 : 0;
             end
             BLTZ: begin
-                Result <= (InA < InB) ? 1 : 0;
+                Result <= ($signed(InA) < $signed(InB)) ? 1 : 0;
             end
             BNE: begin
                 Result <= (InA != InB) ? 1 : 0;

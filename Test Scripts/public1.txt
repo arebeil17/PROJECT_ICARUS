@@ -87,16 +87,17 @@ addi    $s0, $zero, -1  # 204
 bltz    $s0, branch3    # 208
 addi    $s0, $zero, 1   # 212
 bgtz    $s0, branch2    # 216
-j       error           # 220
+						# 220
+j       error           # 224
 
 branch3:
-bltz    $s0, done		# 224
-addi    $s0, $zero, -1  # 228
-bltz    $s0, branch3    # 232
-j       error 			# 236
+bltz    $s0, done		# 228
+addi    $s0, $zero, -1  # 232
+bltz    $s0, branch3    # 236
+j       error 			# 240
 
 done:
-j done					# 240
+j done					# 244
 error:
-j error					# 244
+j error					# 248
 	          

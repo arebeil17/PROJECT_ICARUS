@@ -10,15 +10,15 @@
 module ID_STAGE(
     Clock, Reset,
     // Control Input(s)
-    RegWrite_In, IDEX_MemRead, FWMuxAControl, FWMuxBControl,
+    RegWrite_In, MemReadFromIDEX, FWMuxAControl, FWMuxBControl, RegWriteFromIDEX,
     // Data Input(s)
     EX_Instruction_In, Instruction, PC, WriteAddress, WriteData, FWFromMEM, FWFromWB,  
     // Control Output(s)
-    IDEXFlush, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush,
+    IDEXFlush, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch_Out, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush,
     // Data Output(s)
     SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest);
 
-    input Clock, Reset, RegWrite_In, IDEX_MemRead;
+    input Clock, Reset, RegWrite_In, MemReadFromIDEX, RegWriteFromIDEX;
     input [1:0] FWMuxAControl, FWMuxBControl;
     input [4:0] WriteAddress;
     input [31:0] Instruction, EX_Instruction_In, WriteData, PC, FWFromMEM, FWFromWB;
@@ -26,12 +26,12 @@ module ID_STAGE(
     output wire [31:0] SE_Out, RF_RD1, RF_RD2, BranchDest;
          
     //Control Signal Outputs
-    output IDEXFlush, RegWrite, ALUSrc, MemWrite, MemRead, Branch, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush;
+    output IDEXFlush, RegWrite, ALUSrc, MemWrite, MemRead, Branch_Out, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush;
     output [1:0] ByteSel, RegDestMuxControl, MemToReg;      
     output [4:0] ALUOp;
     output [31:0] JumpDest;
     
-    wire SignExt, LoadMuxControl, Control_WriteEnableMux, Controller_Branch_Out, JumpMuxSel, BC_Branch_Out, BranchSourceMuxControl;
+    wire SignExt, LoadMuxControl, Control_WriteEnableMux, Controller_Branch_Out, JumpMuxSel, BC_Out, BranchSourceMuxControl;
     wire [2:0] BCControl;
     wire [31:0] BranchShift_Out, JumpShift_Out, WriteEnable, BranchSourceMux_Out, FWMuxA_Out, FWMuxB_Out;
     
@@ -40,16 +40,19 @@ module ID_STAGE(
         .Clock(Clock),
         .Reset(Reset),
         //Control Input(s)
-        .MemReadFromIDEX(IDEX_MemRead),
+        .MemReadFromIDEX(MemReadFromIDEX),
         .MemReadFromID(MemRead),
-        .Branch(Controller_Branch_Out),
+        .BranchFromController(Controller_Branch_Out),
+        .BranchFromBC(BC_Out),
+        .RegWriteFromIDEX(RegWriteFromIDEX),
         // Data Input(s)
         .IDInstruction(Instruction),
         .EXInstruction(EX_Instruction_In),
         // Control Output(s)
         .PCWriteEnable(PC_WriteEnable),
         .IFIDWriteEnable(IFIDWriteEnable_Out),
-        .Flush(IDEXFlush));
+        .IDEXFlush(IDEXFlush),
+        .Branch(Branch_Out));
     
     // Jump Resolution
     ShiftLeft JumpShift(
@@ -65,7 +68,7 @@ module ID_STAGE(
     
     // Branch Resolution
     Adder BranchAdder(
-        .InA((PC+4)),
+        .InA(PC+4),
         .InB(BranchShift_Out),
         .Out(BranchDest));
    
@@ -100,7 +103,7 @@ module ID_STAGE(
         .Clock(Clock),
         .InA(FWMuxA_Out),
         .InB(FWMuxB_Out),
-        .Result(BC_Branch_Out),
+        .Result(BC_Out),
         .Control(BCControl));
         
     DatapathController Controller(
@@ -139,6 +142,6 @@ module ID_STAGE(
         .In(Instruction[15:0]),
         .Out(SE_Out));
      
-     assign Branch = Controller_Branch_Out & BC_Branch_Out;
-     assign IFIDFlush = Branch | Jump;
+     //assign Branch = Controller_Branch_Out & BC_Out;
+     assign IFIDFlush = Branch_Out | Jump;
 endmodule
