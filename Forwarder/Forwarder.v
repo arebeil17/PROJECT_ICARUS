@@ -23,23 +23,25 @@ module Forwarder(
     Clock,
     Reset,
     // Control Input(s)
-    WriteEnableFromEXMEM, WriteEnableFromMEMWB,
+    RegWriteFromEXMEM, RegWriteFromMEMWB,
     // Data Input(s)
-    EX_Instruction, EXMEM_WriteReg, MEMWB_WriteReg,
+    EX_Instruction, ID_Instruction, RegDestFromEXMEM, RegDestFromMEMWB,
     // Control Output(s)
-    FWMuxAControl, FWMuxBControl);
+    EXFWMuxAControl, EXFWMuxBControl, IDFWMuxAControl, IDFWMuxBControl);
     
-    input Clock, Reset, WriteEnableFromEXMEM, WriteEnableFromMEMWB;
-    input [4:0] EXMEM_WriteReg, MEMWB_WriteReg;
-    input [31:0] EX_Instruction;
+    input Clock, Reset, RegWriteFromEXMEM, RegWriteFromMEMWB;
+    input [4:0] RegDestFromEXMEM, RegDestFromMEMWB;
+    input [31:0] ID_Instruction, EX_Instruction;
     
-    output reg [1:0] FWMuxAControl, FWMuxBControl;
+    output reg [1:0] EXFWMuxAControl, EXFWMuxBControl, IDFWMuxAControl, IDFWMuxBControl;
     
-    reg [4:0] IDEX_RegRs = 0, IDEX_RegRt = 0;
+    reg [4:0] EX_RegRS, EX_RegRT, ID_RegRS, ID_RegRT;
     
     initial begin
-        FWMuxAControl <= 2'b00;
-        FWMuxBControl <= 2'b00;
+        EXFWMuxAControl <= 2'b00;
+        EXFWMuxBControl <= 2'b00;
+        IDFWMuxAControl <= 2'b00;
+        IDFWMuxBControl <= 2'b00;
     end
     
     // FORWARDING MUX REFERENCE:
@@ -50,69 +52,31 @@ module Forwarder(
     
     always @(*) begin
         //For readability
-        IDEX_RegRs <= EX_Instruction[25:21];
-        IDEX_RegRt <= EX_Instruction[20:16];
+        EX_RegRS <= EX_Instruction[25:21];
+        EX_RegRT <= EX_Instruction[20:16];
+        ID_RegRS <= ID_Instruction[25:21];
+        ID_RegRT <= ID_Instruction[20:16];
         
-        FWMuxAControl <= 2'b00;
-        FWMuxBControl <= 2'b00;
+        EXFWMuxAControl <= 2'b00;
+        EXFWMuxBControl <= 2'b00;
+        IDFWMuxAControl <= 2'b00;
+        IDFWMuxBControl <= 2'b00;
         
-        if(WriteEnableFromMEMWB) begin
-            if(IDEX_RegRs == MEMWB_WriteReg && IDEX_RegRs != 5'b00000) FWMuxAControl <= 2'b10;
-           // if(EX_Instruction[31:26] == 6'b000000)begin 
-                if(IDEX_RegRt == MEMWB_WriteReg /*&& IDEX_RegRt != 5'b00000*/) FWMuxBControl <= 2'b10;
-            //end
+        if(RegWriteFromMEMWB) begin
+            // Forwaring WB -> EX
+            if(EX_RegRS == RegDestFromMEMWB && EX_RegRS != 5'b00000) EXFWMuxAControl <= 2'b10;
+            if(EX_RegRT == RegDestFromMEMWB) EXFWMuxBControl <= 2'b10;
+            // Forwarding WB -> ID (for Branching)
+            if(ID_RegRS == RegDestFromMEMWB && ID_RegRS != 5'b00000) IDFWMuxAControl <= 2'b10;
+            if(ID_RegRT == RegDestFromMEMWB) IDFWMuxBControl <= 2'b10;
         end
-        if(WriteEnableFromEXMEM) begin
-            if(IDEX_RegRs == EXMEM_WriteReg && IDEX_RegRs != 5'b00000)FWMuxAControl <= 2'b01;
-            //if(EX_Instruction[31:26] == 6'b000000)begin 
-                if(IDEX_RegRt == EXMEM_WriteReg && IDEX_RegRt != 5'b00000) FWMuxBControl <= 2'b01;
-            //end
+        if(RegWriteFromEXMEM) begin
+            // Forwarding MEM -> EX
+            if(EX_RegRS == RegDestFromEXMEM && EX_RegRS != 5'b00000) EXFWMuxAControl <= 2'b01;
+            if(EX_RegRT == RegDestFromEXMEM && EX_RegRT != 5'b00000) EXFWMuxBControl <= 2'b01;
+            // Forwarding MEM -> ID (for Branching)
+            if(ID_RegRS == RegDestFromEXMEM && ID_RegRS != 5'b00000) IDFWMuxAControl <= 2'b01;
+            if(ID_RegRT == RegDestFromEXMEM && ID_RegRT != 5'b00000) IDFWMuxBControl <= 2'b01;
         end
-/*        
-        //Forwarding logic for MEM to EX
-         if((EXMEM_WriteReg == IDEX_RegRs) || (EXMEM_WriteReg ==  IDEX_RegRt)) begin
-            //Forward from two different stages
-            //Forward MEM to EX for A and WB to EX for B required 
-            if((EXMEM_WriteReg == IDEX_RegRs) && (MEMWB_WriteReg == IDEX_RegRt))begin
-                FWMuxAControl <= 2'b01;
-                FWMuxBControl <= 2'b10;
-            //Forward from two different stages    
-            //Forward WB to EX for A and MEM to EX for B required 
-            end else if((MEMWB_WriteReg == IDEX_RegRs) &&( EXMEM_WriteReg == IDEX_RegRt)) begin
-                FWMuxAControl <= 2'b10;
-                FWMuxBControl <= 2'b01;
-            //Forward MEM to EX for both A and B
-            end else if((EXMEM_WriteReg ==  IDEX_RegRs) && (EXMEM_WriteReg ==  IDEX_RegRt)) begin
-                FWMuxAControl <= 2'b01;
-                FWMuxBControl <= 2'b01;
-            //Forward MEM to EX for just A    
-            end else if(EXMEM_WriteReg ==  IDEX_RegRs) begin
-                FWMuxAControl <= 2'b01;
-                FWMuxBControl <= 2'b00;
-            //Forward MEM to EX for just B     
-            end else begin
-                FWMuxAControl <= 2'b00;
-                FWMuxBControl <= 2'b01;
-            end 
-        //Forwarding logic for WB to EX
-        end else if((MEMWB_WriteReg ==  IDEX_RegRs) || (MEMWB_WriteReg ==  IDEX_RegRt) ) begin
-            //Forward WB to EX for both A and B
-            if((MEMWB_WriteReg ==  IDEX_RegRs) && (MEMWB_WriteReg ==  IDEX_RegRt)) begin
-                FWMuxAControl <= 2'b10;
-                FWMuxBControl <= 2'b10;
-            //Forward WB to EX for just A    
-            end else if(MEMWB_WriteReg ==  IDEX_RegRs) begin
-                FWMuxAControl <= 2'b10;
-                FWMuxBControl <= 2'b00;
-            //Forward WB to EX for just B     
-            end else begin
-                FWMuxAControl <= 2'b00;
-                FWMuxBControl <= 2'b10;
-            end 
-        //No Forwarding needed
-        end else begin
-            FWMuxAControl <= 2'b00;
-            FWMuxBControl <= 2'b00;
-        end*/
     end
 endmodule

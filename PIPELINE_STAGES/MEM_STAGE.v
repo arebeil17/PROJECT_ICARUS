@@ -8,10 +8,10 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MEM_STAGE(Clock, Reset, PC, WriteData, ReadData, WriteAddress, MemRead, MemWrite, ByteSel);
+module MEM_STAGE(Clock, Reset, PC, WriteData, ReadData, WriteAddress, MemRead, MemWrite, ByteSel, Instruction);
     input Clock, Reset, MemRead, MemWrite;
     input [1:0] ByteSel;
-    input [31:0] PC, WriteData, WriteAddress;
+    input [31:0] PC, WriteData, WriteAddress, Instruction;
     
     output [31:0] ReadData;
     

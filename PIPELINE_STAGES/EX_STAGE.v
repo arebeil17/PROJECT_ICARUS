@@ -11,40 +11,41 @@
 module EX_STAGE(
     Clock, Reset, 
     // Control Input(s)
-    ALUSrc, RegDestMuxControl, ALUOp, EXMEM_RegDest, MEMWB_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable,
+    ALUSrc, RegDestMuxControl, ALUOp, /*EXMEM_RegDest, MEMWB_RegDest, EXMEM_WriteEnable, MEMWB_WriteEnable, */RegWrite_In, FWMuxAControl, FWMuxBControl,
     // Data Input(s)
     PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB, MEM_ReadData,
     // Control Output(s)
-    RegWrite, Zero, RegDest,
+    RegDest, RegWrite_Out,
     // Data Output(s)
-    ALUResult, BranchDest, FWMuxB_Out);
+    ALUResult, FWMuxB_Out);
     
-    input Clock, Reset, ALUSrc, EXMEM_WriteEnable, MEMWB_WriteEnable;
-    input [1:0] RegDestMuxControl;
-    input [4:0] ALUOp, EXMEM_RegDest, MEMWB_RegDest;
+    input Clock, Reset, ALUSrc,/* EXMEM_WriteEnable, MEMWB_WriteEnable, */RegWrite_In;
+    input [1:0] RegDestMuxControl, FWMuxAControl, FWMuxBControl;
+    input [4:0] ALUOp;//, EXMEM_RegDest, MEMWB_RegDest;
     input [31:0] PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB, MEM_ReadData;
     
-    output RegWrite, Zero;
+    output RegWrite_Out;//, Zero;
     output [4:0] RegDest;
-    output [31:0] ALUResult, BranchDest;
+    output [31:0] ALUResult;//, BranchDest;
     output wire [31:0] FWMuxB_Out;
     
     wire [63:0] HiLoWrite, HiLoRead;
-    wire [31:0] BranchShift_Out, ALUSrc_Out, FWMuxA_Out;//, FWMuxB_Out;
+    wire [31:0] /*BranchShift_Out, */ALUSrc_Out, FWMuxA_Out;//, FWMuxB_Out;
     wire [5:0] ALUControl;
-    wire [1:0] FWMuxAControl, FWMuxBControl;
+    //wire [1:0] FWMuxAControl, FWMuxBControl;
+    wire ALURegWrite;
     
-    Forwarder ForwardUnit(
-        .Clock(Clock),
-        .Reset(Reset),
-        .WriteEnableFromEXMEM(EXMEM_WriteEnable),
-        .WriteEnableFromMEMWB(MEMWB_WriteEnable),
-        .EX_Instruction(Instruction),
-        //.RegDest(MEM_RegDest),
-        .EXMEM_WriteReg(EXMEM_RegDest), 
-        .MEMWB_WriteReg(MEMWB_RegDest),
-        .FWMuxAControl(FWMuxAControl),
-        .FWMuxBControl(FWMuxBControl));
+    //Forwarder ForwardUnit(
+    //    .Clock(Clock),
+    //    .Reset(Reset),
+    //    .WriteEnableFromEXMEM(EXMEM_WriteEnable),
+    //    .WriteEnableFromMEMWB(MEMWB_WriteEnable),
+    //    .EX_Instruction(Instruction),
+    //    //.RegDest(MEM_RegDest),
+    //    .EXMEM_WriteReg(EXMEM_RegDest), 
+    //    .MEMWB_WriteReg(MEMWB_RegDest),
+    //    .FWMuxAControl(FWMuxAControl),
+    //    .FWMuxBControl(FWMuxBControl));
         
     Mux32Bit4To1 FWMuxA(
         .In0(RF_RD1),
@@ -52,7 +53,7 @@ module EX_STAGE(
         .In2(FWFromWB),
         .In3(MEM_ReadData),
         .Out(FWMuxA_Out),
-        .sel(FWMuxAControl));
+        .Sel(FWMuxAControl));
         
     Mux32Bit4To1 FWMuxB(
         .In0(RF_RD2),
@@ -60,17 +61,17 @@ module EX_STAGE(
         .In2(FWFromWB),
         .In3(MEM_ReadData),
         .Out(FWMuxB_Out),
-        .sel(FWMuxBControl));
+        .Sel(FWMuxBControl));
     
-    Adder BranchAdder(
-        .InA((PC+4)),
-        .InB(BranchShift_Out),
-        .Out(BranchDest));
+    //Adder BranchAdder(
+    //    .InA((PC+4)),
+    //    .InB(BranchShift_Out),
+    //    .Out(BranchDest));
      
-    ShiftLeft BranchShift(
-        .In(SE_In),
-        .Out(BranchShift_Out),
-        .Shift(5'd2));
+    //ShiftLeft BranchShift(
+    //    .In(SE_In),
+    //    .Out(BranchShift_Out),
+    //    .Shift(5'd2));
 
     ALU_Controller ALUController(
         .Reset(Reset),
@@ -82,7 +83,7 @@ module EX_STAGE(
         .Out(ALUSrc_Out),
         .In0(FWMuxB_Out),
         .In1(SE_In),
-        .sel(ALUSrc));
+        .Sel(ALUSrc));
      
     ALU32Bit ALU(
         .ALUControl(ALUControl),
@@ -90,11 +91,11 @@ module EX_STAGE(
         .B(ALUSrc_Out),
         .Shamt(Instruction[10:6]),
         .ALUResult(ALUResult),
-        .Zero(Zero),
+        //.Zero(Zero),
         .HiLoEn(HiLoEn),
         .HiLoWrite(HiLoWrite), 
         .HiLoRead(HiLoRead),
-        .RegWrite(RegWrite));
+        .RegWrite(ALURegWrite));
      
     HiLoRegister HiLo(
         .WriteEnable(HiLoEn) , 
@@ -109,5 +110,7 @@ module EX_STAGE(
         .In2(32'b11111),
         .In3(32'b0),
         .Out(RegDest),
-        .sel(RegDestMuxControl));
+        .Sel(RegDestMuxControl));
+    
+    assign RegWrite_Out = RegWrite_In & ALURegWrite;
 endmodule

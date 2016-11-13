@@ -43,5 +43,5 @@ module IF_STAGE(Clock, Reset, Jump, Branch, BranchDest, JumpDest, Instruction, P
         .In1(BranchDest),
         .In2(JumpDest),
         .In3(32'b0),
-        .sel({Jump, Branch}));    
+        .Sel({Jump, Branch}));    
 endmodule

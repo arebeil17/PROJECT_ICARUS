@@ -21,50 +21,43 @@
 
 module HazardDetectionUnit(
     // Control Input(s)
-    Clock, Reset, MemReadFromIDEX, MemReadFromID,
+    Clock, Reset, MemReadFromIDEX, MemReadFromID, Branch,
     // Data Input(s)
-    ID_Instruction, EX_Instruction,
+    IDInstruction, EXInstruction,
     // Control Output(s)
-    Flush, PC_WriteEnable, IFID_WriteEnable, WriteEnableMuxControl);
+    Flush, PCWriteEnable, IFIDWriteEnable);
     
-    input Clock, Reset, MemReadFromIDEX, MemReadFromID;
-    input [31:0] ID_Instruction, EX_Instruction;
+    input Clock, Reset, MemReadFromIDEX, MemReadFromID, Branch;
+    input [31:0] IDInstruction, EXInstruction;
     
-    output reg Flush, PC_WriteEnable, IFID_WriteEnable, WriteEnableMuxControl;
+    output reg Flush, PCWriteEnable, IFIDWriteEnable;
     
-    reg stall = 0;
-    
-    //reg out;
+    reg stall;
     
     initial begin
-        PC_WriteEnable = 0;
-        IFID_WriteEnable = 0;
-        WriteEnableMuxControl = 0;
+        PCWriteEnable <= 0;
+        IFIDWriteEnable <= 0;
         Flush = 0;
+        stall = 0;
     end
     
     always @(negedge Clock) begin
-        if(PC_WriteEnable == 0)PC_WriteEnable <= 1;
-        if(IFID_WriteEnable == 0)IFID_WriteEnable <= 1;
-        if(WriteEnableMuxControl == 0)WriteEnableMuxControl <= 1;
-        if(MemReadFromIDEX || MemReadFromID) begin // Check if Last Command was LW
-            if(EX_Instruction[20:16] == ID_Instruction[25:21] || EX_Instruction[20:16] == ID_Instruction[20:16]) begin
-                PC_WriteEnable <= 0;
-                IFID_WriteEnable <= 0;
-                WriteEnableMuxControl <= 0;
+        if(MemReadFromIDEX || MemReadFromID || Branch) begin // Check if Previous/Current Command was/is LW
+            if((EXInstruction[20:16] == IDInstruction[25:21] || 
+                EXInstruction[20:16] == IDInstruction[20:16]) && EXInstruction[20:16] != 5'b00000)begin
+                PCWriteEnable <= 0;
+                IFIDWriteEnable <= 0;
                 Flush <= 1;
                 stall <= 1;
             end else begin
-                PC_WriteEnable <= 1;
-                IFID_WriteEnable <= 1;
-                WriteEnableMuxControl <= 1;
+                PCWriteEnable <= 1;
+                IFIDWriteEnable <= 1;
                 Flush <= 0;
                 stall <= 0;
             end
         end else begin
-            PC_WriteEnable <= 1;
-            IFID_WriteEnable <= 1;
-            WriteEnableMuxControl <= 1;
+            PCWriteEnable <= 1;
+            IFIDWriteEnable <= 1;
             Flush <= 0;
             stall <= 0;
         end

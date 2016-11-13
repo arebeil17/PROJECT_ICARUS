@@ -68,35 +68,35 @@ lw $t2, 4($t1)		# 160 [t2] = 0x64	PASS
 
 
 #branch  cases 8,9,10
-la      $a0, asize1		# 164
-j       start          	# 168 jump to jump1.
+la      $a0, asize1		# 164	
+j       start          	# 168 
 addi    $a0, $zero, -1  # 172 if $a0 == -1, jump failed.
 addi    $a0, $zero, -1  # 176 if $a0 == -1, jump failed.
 start:
-lw      $s0, 4($a0)		# 180  			
-sw      $s0, 0($a0)		# 184			
+lw      $s0, 4($a0)		# 180 [s0] = 0x320	PASS
+sw      $s0, 0($a0)		# 184
 
 branch1:
-bgez    $s0, branch2	# 192			
-addi    $s0, $s0, 1		# 196			
-bgez    $s0, branch1    # 200			
-j       error         	# 204			
+bgez    $s0, branch2	# 188
+addi    $s0, $s0, 1		# 192
+bgez    $s0, branch1    # 196
+j       error         	# 200
 
 branch2:
-addi    $s0, $zero, -1  # 208
-bltz    $s0, branch3    # 212
-addi    $s0, $zero, 1   # 216
-bgtz    $s0, branch2    # 220
-j       error           # 224
+addi    $s0, $zero, -1  # 204
+bltz    $s0, branch3    # 208
+addi    $s0, $zero, 1   # 212
+bgtz    $s0, branch2    # 216
+j       error           # 220
 
 branch3:
-bltz    $s0, done		# 228
-addi    $s0, $zero, -1  # 232
-bltz    $s0, branch3    # 236
-j       error 			# 240
+bltz    $s0, done		# 224
+addi    $s0, $zero, -1  # 228
+bltz    $s0, branch3    # 232
+j       error 			# 236
 
 done:
-j done					# 244
+j done					# 240
 error:
-j error					# 248
+j error					# 244
 	          

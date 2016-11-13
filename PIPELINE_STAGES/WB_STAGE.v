@@ -21,6 +21,6 @@ module WB_STAGE(Clock, Reset, MemToReg, ALUResult, ReadData, PC, MemToReg_Out);
         .In1(ReadData),
         .In2(PC),
         .In3(32'b0),
-        .sel(MemToReg));
+        .Sel(MemToReg));
         
 endmodule
