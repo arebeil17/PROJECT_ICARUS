@@ -143,7 +143,7 @@ module DatapathController(
             OP_001001: begin // ADDIU
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
-                MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00111;
+                MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00111;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0;
                 //StageWriteEnable <= 3'b111; IFID_Flush <= 0;

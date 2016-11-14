@@ -90,6 +90,7 @@ module EX_STAGE(
         .A(FWMuxA_Out),
         .B(ALUSrc_Out),
         .Shamt(Instruction[10:6]),
+        .RS(Instruction[25:21]),
         .ALUResult(ALUResult),
         //.Zero(Zero),
         .HiLoEn(HiLoEn),

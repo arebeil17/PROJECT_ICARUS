@@ -63,7 +63,7 @@ module HazardDetectionUnit(
                 (EXInstruction[31:26] != 2'b000000 && EXInstruction[20:16] == IDInstruction[25:21])) begin // If EXInstruction is I-Type AND IF EX.RT == ID.RS
                 PCWriteEnable <= 0;
                 IFIDWriteEnable <= 0;
-                IDEXFlush <= 0;
+                IDEXFlush <= 1;
                 Branch <= 0;
                 stall <= 1;
             end else begin
