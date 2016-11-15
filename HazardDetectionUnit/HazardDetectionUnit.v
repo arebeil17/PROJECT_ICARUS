@@ -21,14 +21,14 @@
 
 module HazardDetectionUnit(
     // Control Input(s)
-    Clock, Reset, MemReadFromIDEX, MemReadFromID, BranchFromController, BranchFromBC, RegWriteFromIDEX,
+    Reset, MemReadFromEXMEM, MemReadFromIDEX, MemReadFromID, BranchFromController, BranchFromBC, RegWriteFromIDEX,
     // Data Input(s)
-    IDInstruction, EXInstruction,
+    IDInstruction, EXInstruction, MEMInstruction,
     // Control Output(s)
     IDEXFlush, PCWriteEnable, IFIDWriteEnable, Branch);
     
-    input Clock, Reset, MemReadFromIDEX, MemReadFromID, BranchFromController, BranchFromBC, RegWriteFromIDEX;
-    input [31:0] IDInstruction, EXInstruction;
+    input Reset, MemReadFromEXMEM, MemReadFromIDEX, MemReadFromID, BranchFromController, BranchFromBC, RegWriteFromIDEX;
+    input [31:0] IDInstruction, EXInstruction, MEMInstruction;
     
     output reg IDEXFlush, PCWriteEnable, IFIDWriteEnable, Branch;
     
@@ -42,13 +42,13 @@ module HazardDetectionUnit(
     end
     
     always @(*) begin
-        if(MemReadFromIDEX || MemReadFromID) begin // Check if Previous/Current Command was/is LW
-            if((EXInstruction[20:16] == IDInstruction[25:21] || 
-                EXInstruction[20:16] == IDInstruction[20:16]) && EXInstruction[20:16] != 5'b00000)begin
+        if(BranchFromController && MemReadFromEXMEM) begin // If IDInstruction is Dependent on EXInstruction Stall Branch Decision
+            if((MEMInstruction[31:26] == 2'b000000 && MEMInstruction[15:11] == IDInstruction[25:21]) || // If MEMInstruction is R-Type AND IF MEM.RD == ID.RS
+                (MEMInstruction[31:26] != 2'b000000 && MEMInstruction[20:16] == IDInstruction[25:21])) begin // If MEMInstruction is I-Type AND IF MEM.RT == ID.RS
                 PCWriteEnable <= 0;
                 IFIDWriteEnable <= 0;
                 IDEXFlush <= 1;
-                Branch <= BranchFromController & BranchFromBC;
+                Branch <= 0;
                 stall <= 1;
             end else begin
                 PCWriteEnable <= 1;
@@ -57,14 +57,28 @@ module HazardDetectionUnit(
                 Branch <= BranchFromController & BranchFromBC;
                 stall <= 0;
             end
-        end else if(BranchFromController && (MemReadFromIDEX || RegWriteFromIDEX)) begin
-            // If IDInstruction is Dependent on EXInstruction Stall Branch Decision
+        end else if(BranchFromController && (RegWriteFromIDEX || MemReadFromIDEX)) begin // If IDInstruction is Dependent on EXInstruction Stall Branch Decision
             if((EXInstruction[31:26] == 2'b000000 && EXInstruction[15:11] == IDInstruction[25:21]) || // If EXInstruction is R-Type AND IF EX.RD == ID.RS
                 (EXInstruction[31:26] != 2'b000000 && EXInstruction[20:16] == IDInstruction[25:21])) begin // If EXInstruction is I-Type AND IF EX.RT == ID.RS
                 PCWriteEnable <= 0;
                 IFIDWriteEnable <= 0;
                 IDEXFlush <= 1;
                 Branch <= 0;
+                stall <= 1;
+            end else begin
+                PCWriteEnable <= 1;
+                IFIDWriteEnable <= 1;
+                IDEXFlush <= 0;
+                Branch <= BranchFromController & BranchFromBC;
+                stall <= 0;
+            end
+        end else if((MemReadFromIDEX || MemReadFromID)) begin // Check if Previous/Current Command was/is LW
+            if((EXInstruction[20:16] == IDInstruction[25:21] || 
+                EXInstruction[20:16] == IDInstruction[20:16]) && EXInstruction[20:16] != 5'b00000)begin
+                PCWriteEnable <= 0;
+                IFIDWriteEnable <= 0;
+                IDEXFlush <= 1;
+                Branch <= BranchFromController & BranchFromBC;
                 stall <= 1;
             end else begin
                 PCWriteEnable <= 1;

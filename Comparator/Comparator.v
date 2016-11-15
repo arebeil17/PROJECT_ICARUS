@@ -35,7 +35,7 @@ module Comparator(Clock, InA, InB, Result, Control);
                         BNE  = 'b101; // Done
                         
     
-    always @(*)begin
+    always @(negedge Clock)begin
         case (Control)
             BEQ: begin
                 Result <= (InA == InB) ? 1 : 0;

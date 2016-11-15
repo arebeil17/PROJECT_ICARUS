@@ -10,18 +10,18 @@
 module ID_STAGE(
     Clock, Reset,
     // Control Input(s)
-    RegWrite_In, MemReadFromIDEX, FWMuxAControl, FWMuxBControl, RegWriteFromIDEX,
+    RegWrite_In, MemReadFromEXMEM, MemReadFromIDEX, FWMuxAControl, FWMuxBControl, RegWriteFromIDEX,
     // Data Input(s)
-    EX_Instruction_In, Instruction, PC, WriteAddress, WriteData, FWFromMEM, FWFromWB,  
+    MEM_Instruction_In, EX_Instruction_In, Instruction, PC, WriteAddress, WriteData, FWFromMEM, FWFromWB,  
     // Control Output(s)
     IDEXFlush, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch_Out, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush,
     // Data Output(s)
     SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest);
 
-    input Clock, Reset, RegWrite_In, MemReadFromIDEX, RegWriteFromIDEX;
+    input Clock, Reset, RegWrite_In, MemReadFromIDEX, RegWriteFromIDEX, MemReadFromEXMEM;
     input [1:0] FWMuxAControl, FWMuxBControl;
     input [4:0] WriteAddress;
-    input [31:0] Instruction, EX_Instruction_In, WriteData, PC, FWFromMEM, FWFromWB;
+    input [31:0] Instruction, MEM_Instruction_In, EX_Instruction_In, WriteData, PC, FWFromMEM, FWFromWB;
     //Output wires
     output wire [31:0] SE_Out, RF_RD1, RF_RD2, BranchDest;
          
@@ -37,17 +37,18 @@ module ID_STAGE(
     
     // Hazard Detection Unit
     HazardDetectionUnit HDU(
-        .Clock(Clock),
         .Reset(Reset),
         //Control Input(s)
         .MemReadFromIDEX(MemReadFromIDEX),
         .MemReadFromID(MemRead),
+        .MemReadFromEXMEM(MemReadFromEXMEM),
         .BranchFromController(Controller_Branch_Out),
         .BranchFromBC(BC_Out),
         .RegWriteFromIDEX(RegWriteFromIDEX),
         // Data Input(s)
         .IDInstruction(Instruction),
         .EXInstruction(EX_Instruction_In),
+        .MEMInstruction(MEM_Instruction_In),
         // Control Output(s)
         .PCWriteEnable(PC_WriteEnable),
         .IFIDWriteEnable(IFIDWriteEnable_Out),
