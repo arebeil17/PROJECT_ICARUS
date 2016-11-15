@@ -51,16 +51,16 @@
 module RegisterFile(
     Clk, Reset,
     // Control Input(s)
-    RegWrite,
+    RegWrite, JAL,
     // Data Input(s)
-    ReadRegister1, ReadRegister2, WriteRegister, 
+    ReadRegister1, ReadRegister2, WriteRegister1, WriteRegister2, 
     // Control Output(s)
     // Data Output(s)
-    WriteData,  ReadData1, ReadData2);
+    WriteData1, WriteData2,  ReadData1, ReadData2);
     
-    input [4:0] ReadRegister1, ReadRegister2, WriteRegister;
-    input [31:0] WriteData;
-    input RegWrite, Reset;
+    input [4:0] ReadRegister1, ReadRegister2, WriteRegister1, WriteRegister2;
+    input [31:0] WriteData1, WriteData2;
+    input RegWrite, Reset, JAL;
     input Clk;
     
     output reg [31:0] ReadData1, ReadData2;
@@ -143,9 +143,12 @@ module RegisterFile(
             ReadData1 <= 32'b0;
             ReadData2 <= 32'b0;
         end else begin
-            if(RegWrite)registers[WriteRegister] = WriteData;
-            ReadData1 = registers[ReadRegister1];
-            ReadData2 = registers[ReadRegister2];
+            if(RegWrite)registers[WriteRegister1] = WriteData1;
+                ReadData1 = registers[ReadRegister1];
+                ReadData2 = registers[ReadRegister2];
+            if(JAL) begin
+                registers[WriteRegister2] = WriteData2;
+            end
         end
     end
     //Should not be clocked  else will cause intermittent delays on reads

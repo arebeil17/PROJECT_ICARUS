@@ -31,7 +31,7 @@ module ID_STAGE(
     output [4:0] ALUOp;
     output [31:0] JumpDest;
     
-    wire SignExt, LoadMuxControl, Control_WriteEnableMux, Controller_Branch_Out, JumpMuxSel, BC_Out, BranchSourceMuxControl;
+    wire SignExt, LoadMuxControl, Control_WriteEnableMux, Controller_Branch_Out, JumpMuxSel, BC_Out, BranchSourceMuxControl, JAL;
     wire [2:0] BCControl;
     wire [31:0] BranchShift_Out, JumpShift_Out, WriteEnable, BranchSourceMux_Out, FWMuxA_Out, FWMuxB_Out;
     
@@ -124,15 +124,19 @@ module ID_STAGE(
         .JumpMux(JumpMuxSel),
         .ByteSel(ByteSel),
         .BCControl(BCControl),
-        .BranchSourceMux(BranchSourceMuxControl)
+        .BranchSourceMux(BranchSourceMuxControl),
+        .JAL(JAL)
         /*.IFID_Flush(IFID_Flush)*/);
         
      RegisterFile RF(
         .ReadRegister1(Instruction[25:21]),
         .ReadRegister2(Instruction[20:16]),
-        .WriteRegister(WriteAddress),
-        .WriteData(WriteData),
+        .WriteRegister1(WriteAddress),
+        .WriteRegister2(5'd31),
+        .WriteData1(WriteData),
+        .WriteData2(PC+4),
         .RegWrite(RegWrite_In),
+        .JAL(JAL),
         .Clk(Clock),
         .ReadData1(RF_RD1),
         .ReadData2(RF_RD2),
