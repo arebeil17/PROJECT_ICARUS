@@ -143,7 +143,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
             MULTU: begin
                 RegWrite <= 0; // Write NOT Concur
                 HiLoEn = 1;
-                temp64 = A * B;
+                temp64 =$unsigned( A) * $unsigned(B);
                 HiLoWrite <= temp64;
                 ALUResult <= 0; //No ALU Result defaults to zero;
             end
@@ -264,30 +264,15 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
                 ALUResult = HiLoRead[31:0];
             end
             MTHI: begin
-                RegWrite <= 0; // Write NOT Concur
+                RegWrite = 0; // Write NOT Concur
                 HiLoEn = 1;
-                HiLoWrite = {A,HiLoRead[31:0]};
-                ALUResult = 0;
-            end
-            MTLO: begin
-                RegWrite <= 0; // Write NOT Concur
-                HiLoWrite = {HiLoRead[63:32],A};
-                HiLoEn = 1;
-            end
-            MFHI: begin
-                ALUResult <= HiLoRead[63:32];
-            end
-            MFLO: begin
-                ALUResult <= HiLoRead[31:0];
-            end
-            MTHI: begin
-                HiLoEn = 1;
-                HiLoWrite = {HiLoRead[63:32],A};
+                HiLoWrite <= {A,HiLoRead[31:0]};
                 ALUResult <= 0;
             end
             MTLO: begin
+                RegWrite = 0;
                 HiLoEn = 1;
-                HiLoWrite[31:0] = {HiLoRead[63:32],A}; 
+                HiLoWrite[31:0] <= {HiLoRead[63:32],A}; 
                 ALUResult <= 0;
             end 
             EQ: begin //Checks if A and B are equal

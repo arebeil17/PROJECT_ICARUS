@@ -42,7 +42,7 @@
         if(Reset == 1)begin
             PC <= 0;
             hold <= 1;
-        end else if(NewPC > 220)begin
+        end else if(NewPC > 260)begin
             PC <= 0;
         end else if(hold) begin
             hold <= 0;

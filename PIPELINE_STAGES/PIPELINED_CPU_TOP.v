@@ -61,19 +61,20 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     wire EXMEM_RegWrite_Out, EXMEM_MemRead_Out, EXMEM_MemWrite_Out;
     wire [1:0] EXMEM_ByteSel_Out, EXMEM_MemToReg_Out;
     wire [4:0] EXMEM_RegDest_Out;
-    wire [31:0] EXMEM_ALUResult_Out, EXMEM_WriteData_Out, EXMEM_PC_Out, EXMEM_Instruction_Out;
+    wire [31:0] /*EXMEM_ALUResult_Out*/ EXMEM_WriteData_Out /*EXMEM_PC_Out*/, EXMEM_Instruction_Out;
+    wire [31:0] EXMEM_ALUResult_Out, EXMEM_PC_Out;
     
     //MEM Stage Output(s)
     wire [31:0] MEM_ReadData_Out;
     
     // MEMWB Stage Register Output(s)
-    wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
+    (* mark_debus = "true"*) wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
     wire [4:0] MEMWB_RegDest_Out;
     wire [1:0] MEMWB_MemToReg_Out;
     wire MEMWB_RegWrite_Out; 
     
     // WB Stage Output(s)
-    wire [31:0] WB_MemToReg_Out;
+    (* mark_debus = "true"*) wire [31:0] WB_MemToReg_Out;
     
     // Forwarding Unit
     Forwarder FU(
@@ -319,12 +320,12 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
      Reg32 WriteOutput(
         .Clk(ClkOut), 
         .Rst(Rst), 
-        .data(), 
+        .data(WB_MemToReg_Out), 
         .Output(WriteOutReg));
      Reg32 PCOutput(
         .Clk(ClkOut), 
         .Rst(Rst), 
-        .data(), 
+        .data(MEMWB_PC_Out), 
         .Output(PC_OutReg));
     
     // Clock Divider

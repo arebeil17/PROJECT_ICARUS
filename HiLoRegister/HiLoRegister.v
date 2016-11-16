@@ -24,11 +24,11 @@ module HiLoRegister(WriteEnable , WriteData, HiLoReg, Clock, Reset);
     
     input Reset, Clock, WriteEnable;
     
-    output reg [63:0] HiLoReg = 0; 
+    output reg [63:0] HiLoReg; 
 
-//    initial begin
-//        HiLo <= 64'd0;
-//    end
+    initial begin
+        HiLoReg <= 64'd0;
+    end
     
 //    always @(posedge Reset) begin
 //        HiLo <= 64'd0;

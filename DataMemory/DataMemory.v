@@ -53,12 +53,13 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
     
     //initialize data memory
     initial begin
-        memory[0] <= 32'd0;
-        memory[1] <= 32'd1;
-        memory[2] <= 32'd2;
-        memory[3] <= 32'd3;
-        memory[4] <= 32'd4;
-        memory[5] <= -32'd1;    
+        //test cases 14-15
+//        memory[0] <= 32'd0;
+//        memory[1] <= 32'd1;
+//        memory[2] <= 32'd2;
+//        memory[3] <= 32'd3;
+//        memory[4] <= 32'd4;
+//        memory[5] <= -32'd1;    
     
     
 //        memory[0] <= 32'd100;
@@ -75,7 +76,7 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
 //        memory[11] <= 32'd1200;
 
         
-        for(i = 6; i < 256; i = i + 1) begin
+        for(i = 0; i < 256; i = i + 1) begin
             memory[i] = 0;
         end
     end
