@@ -68,7 +68,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     wire [31:0] MEM_ReadData_Out;
     
     // MEMWB Stage Register Output(s)
-    (* mark_debus = "true"*) wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
+    wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
     wire [4:0] MEMWB_RegDest_Out;
     wire [1:0] MEMWB_MemToReg_Out;
     wire MEMWB_RegWrite_Out; 

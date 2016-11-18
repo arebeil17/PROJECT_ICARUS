@@ -117,12 +117,12 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
         HiLoEn <= 0;
         temp_1 <= 32'b0;
         temp_2 <= 32'b0;
-        temp64 <= 64'd0;
-        HiLoWrite <= 64'd0;
-        ALUResult <= 32'd0;
+        temp64 <= 64'b0;
+        HiLoWrite <= 64'b0;
+        ALUResult <= 32'b0;
     end
     
-    always @(*) begin
+    always @(ALUControl, Operation, A, B, Shamt, RS,) begin
         HiLoEn = 0;
         case(Operation)
             ADD: begin
@@ -147,7 +147,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
             MULTU: begin
                 RegWrite <= 0; // Write NOT Concur
                 HiLoEn = 1;
-                temp64 = $unsigned(A) * $unsigned(B);
+                temp64 = A * B;
                 HiLoWrite <= temp64;
                 ALUResult <= 0; //No ALU Result defaults to zero;
             end
@@ -260,7 +260,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
                 end
             end
             MFHI: begin
-                RegWrite <= 1; // Write Concur
+                RegWrite = 1; // Write Concur
                 ALUResult = HiLoRead[63:32];
             end
             MFLO: begin

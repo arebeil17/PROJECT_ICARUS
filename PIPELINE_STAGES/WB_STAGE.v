@@ -13,7 +13,7 @@ module WB_STAGE(Clock, Reset, MemToReg, ALUResult, ReadData, PC, MemToReg_Out);
     input [1:0] MemToReg;
     input [31:0] ALUResult, ReadData, PC;
     
-    output [31:0] MemToReg_Out;
+    (* mark_debus = "true"*) output [31:0] MemToReg_Out;
     
     Mux32Bit4To1 MemToRegMux(
         .Out(MemToReg_Out),
