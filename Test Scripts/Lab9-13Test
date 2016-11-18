@@ -42,7 +42,7 @@ mul     $s0, $s0, $s2       # 92 $s0 = 4
 addi    $s0, $s0, 4         # 96 $s0 = 8
 andi    $s0, $s0, 0         # 100 $s0 = 0
 ori     $s0, $s0, 1         # 104 $s0 = 1
-slti    $s0, $s0, 0         # 108 $s0 = 
+slti    $s0, $s0, 0         # 108 $s0 = 0
 slti    $s0, $s0, 1         # 112 $s0 = 1
 xori    $s0, $s0, 1         # 116 $s0 = 0
 xori    $s0, $s0, 1         # 120 $s0 = 1
@@ -64,11 +64,11 @@ mfhi   $s4  				# 172 $s4 = -1
 mflo   $s5 					# 176 s5 = -32
 
 multu  $s1, $s2 			# 180 HI = 31(0x1f)  LO = -32 (0xffffffe0)
-mfhi   $s4  				# 184 $s4 = 31
+mfhi   $s4  				# 184 $s4 = 31?
 mflo   $s5 					# 188 s5 = -32
 
 madd   $s1, $s2 			# 192 HI = 31(0x1f)  LO = -64 (0xffffffc0)
-mfhi   $s4  				# 196 $s4 = 31
+mfhi   $s4  				# 196 $s4 = 31?
 mflo   $s5 					# 200 s5 = -64
 
 mthi   $s2 					# 204 HI = 32
@@ -81,7 +81,7 @@ msub   $s4 , $s2     		# 224 HI = 32 LO = -1025
 mfhi   $s4  				# 228 $s4 = 32
 mflo   $s5 					# 232 s5 = -1025
 
-addi   $s2, $zero, 1		# 236 s2 = 1`
+addi   $s2, $zero, 1		# 236 s2 = 1
 rotr   $s1, $s2, 31   		# 240 s1 = 2
 addi   $s4, $zero, 31		# 244 s4 = 31
 rotrv   $s1, $s1, $s4 		# 248 s1 = 4
