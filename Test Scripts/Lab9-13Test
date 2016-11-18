@@ -15,82 +15,79 @@
 
 
 main:
-addi    $s0, $zero, 1       # $s0 = 1
-addi    $s1, $zero, 1       # $s1 = 1
-and     $s0, $s0, $s1       # $s0 = 1
-and     $s0, $s0, $zero     # $s0 = 0
-sub     $s0, $s1, $s0       # $s0 = 1
-nor     $s0, $s0, $zero     # $s0 = -2
-nor     $s0, $s0, $zero     # $s0 = 1
-or      $s0, $zero, $zero   # $s0 = 0
-or      $s0, $s1, $zero     # $s0 = 1
-sll     $s0, $s0, 2         # $s0 = 4
-sllv    $s0, $s0, $s1       # $s0 = 8
-slt     $s0, $s0, $zero     # $s0 = 0
-slt     $s0, $s0, $s1       # $s0 = 1
-sra     $s0, $s1, 1         # $s0 = 0
-srav    $s0, $s1, $zero     # $s0 = 1
-srl     $s0, $s1, 1         # $s0 = 0
-sll     $s0, $s1, 3         # $s0 = 8
-srl     $s0, $s0, 3         # $s0 = 1
-sllv    $s0, $s0, $s1       # $s0 = 2
-srlv    $s0, $s0, $s1       # $s0 = 1
-xor     $s0, $s0, $s1       # $s0 = 0
-xor     $s0, $s0, $s1       # $s0 = 1
-addi	$s2, $zero, 4		# $s2 = 4	
-mul     $s0, $s0, $s2       # $s0 = 4
-addi    $s0, $s0, 4         # $s0 = 8
-andi    $s0, $s0, 0         # $s0 = 0
-ori     $s0, $s0, 1         # $s0 = 1
-slti    $s0, $s0, 0         # $s0 = 
-slti    $s0, $s0, 1         # $s0 = 1
-xori    $s0, $s0, 1         # $s0 = 0
-xori    $s0, $s0, 1         # $s0 = 1
+addi    $s0, $zero, 1       # 0 $s0 = 1
+addi    $s1, $zero, 1       # 4 $s1 = 1
+and     $s0, $s0, $s1       # 8 $s0 = 1
+and     $s0, $s0, $zero     # 12 $s0 = 0
+sub     $s0, $s1, $s0       # 16 $s0 = 1
+nor     $s0, $s0, $zero     # 20 $s0 = -2
+nor     $s0, $s0, $zero     # 24 $s0 = 1
+or      $s0, $zero, $zero   # 28 $s0 = 0
+or      $s0, $s1, $zero     # 32 $s0 = 1
+sll     $s0, $s0, 2         # 36 $s0 = 4
+sllv    $s0, $s0, $s1       # 40 $s0 = 8
+slt     $s0, $s0, $zero     # 44 $s0 = 0
+slt     $s0, $s0, $s1       # 48 $s0 = 1
+sra     $s0, $s1, 1         # 52 $s0 = 0
+srav    $s0, $s1, $zero     # 56 $s0 = 1
+srl     $s0, $s1, 1         # 60 $s0 = 0
+sll     $s0, $s1, 3         # 64 $s0 = 8
+srl     $s0, $s0, 3         # 68 $s0 = 1
+sllv    $s0, $s0, $s1       # 72 $s0 = 2
+srlv    $s0, $s0, $s1       # 76 $s0 = 1
+xor     $s0, $s0, $s1       # 80 $s0 = 0
+xor     $s0, $s0, $s1       # 84 $s0 = 1
+addi	$s2, $zero, 4		# 88 $s2 = 4	
+mul     $s0, $s0, $s2       # 92 $s0 = 4
+addi    $s0, $s0, 4         # 96 $s0 = 8
+andi    $s0, $s0, 0         # 100 $s0 = 0
+ori     $s0, $s0, 1         # 104 $s0 = 1
+slti    $s0, $s0, 0         # 108 $s0 = 
+slti    $s0, $s0, 1         # 112 $s0 = 1
+xori    $s0, $s0, 1         # 116 $s0 = 0
+xori    $s0, $s0, 1         # 120 $s0 = 1
 
-addi    $s0, $zero, -2      # $s0 = -2
-addi    $s1, $zero, 2       # $s1 = 2
-sltu    $s2, $s1, $s0       #$s2 = 1
-sltiu   $s0, $s1, -2        #$s0 = 1
-movz    $s0, $s1, $zero     #$s0 = 2
-movn    $s0, $zero, $s1     #$s0 = 0
-add     $s0, $s1, $s2       #$s0 = 3
-addi    $s0, $zero, -2      # $s0 = -2
-addu    $s1, $s1, $s0       #s1 = 0
+addi    $s0, $zero, -2      # 124 $s0 = -2
+addi    $s1, $zero, 2       # 128 $s1 = 2
+sltu    $s2, $s1, $s0       # 132 $s2 = 1
+sltiu   $s0, $s1, -2        # 136 $s0 = 1
+movz    $s0, $s1, $zero     # 140 $s0 = 2
+movn    $s0, $zero, $s1     # 144 $s0 = 0
+add     $s0, $s1, $s2       # 148 $s0 = 3
+addi    $s0, $zero, -2      # 152 $s0 = -2
+addu    $s1, $s1, $s0       # 156 s1 = 0
 
-addiu  $s1, $zero, -1 
-addi   $s2, $zero, 32       # $s2 = 32
-mult   $s1, $s2 #HI = -1  LO = -32
-mfhi   $s4  # $s4 = -1
-mflo   $s5 #s5 = -32
+addiu  $s1, $zero, -1 		# 160 $s1 = -1
+addi   $s2, $zero, 32       # 164 $s2 = 32
+mult   $s1, $s2 			# 168 HI = -1  LO = -32
+mfhi   $s4  				# 172 $s4 = -1
+mflo   $s5 					# 176 s5 = -32
 
-multu  $s1, $s2 #HI = 31(0x1f)  LO = -32 (0xffffffe0)
-mfhi   $s4  # $s4 = 31
-mflo   $s5 #s5 = -32
+multu  $s1, $s2 			# 180 HI = 31(0x1f)  LO = -32 (0xffffffe0)
+mfhi   $s4  				# 184 $s4 = 31
+mflo   $s5 					# 188 s5 = -32
 
-madd   $s1, $s2 #HI = 31(0x1f)  LO = -64 (0xffffffc0)
-mfhi   $s4  # $s4 = 31
-mflo   $s5 #s5 = -64
+madd   $s1, $s2 			# 192 HI = 31(0x1f)  LO = -64 (0xffffffc0)
+mfhi   $s4  				# 196 $s4 = 31
+mflo   $s5 					# 200 s5 = -64
 
-mthi   $s2 #HI = 32
-mtlo   $s1 #LO = -1
-mfhi   $s4  # $s4 = 32
-mflo   $s5 #s5 = -1
-andi   $s1 , $s1, 65535  #s1= 65535 
+mthi   $s2 					# 204 HI = 32
+mtlo   $s1 					# 208 LO = -1
+mfhi   $s4  				# 212 $s4 = 32
+mflo   $s5 					# 216 s5 = -1
+andi   $s1 , $s1, 65535  	# 220 s1= 65535 
 
+msub   $s4 , $s2     		# 224 HI = 32 LO = -1025 
+mfhi   $s4  				# 228 $s4 = 32
+mflo   $s5 					# 232 s5 = -1025
 
-
-
-msub   $s4 , $s2     #HI = 32 LO = -1025 
-mfhi   $s4  # $s4 = 32
-mflo   $s5 #s5 = -1025
-
-addi   $s2, $zero, 1
-rotr   $s1, $s2, 31   #s1 = 2
-addi   $s4, $zero, 31
-rotrv   $s1, $s1, $s4 # s1 = 4
-ori    $s1 , $zero, 4080
-seb    $s4, $s1   #s4 = -16
-seh    $s4 , $s1  #s4 = 4080
+addi   $s2, $zero, 1		# 236 s2 = 1`
+rotr   $s1, $s2, 31   		# 240 s1 = 2
+addi   $s4, $zero, 31		# 244 s4 = 31
+rotrv   $s1, $s1, $s4 		# 248 s1 = 4
+ori    $s1 , $zero, 4080	# 252 s1 = 4080
+seb    $s4, $s1   			# 256 s4 = -16
+seh    $s4 , $s1  			# 260 s4 = 4080
 
 
 

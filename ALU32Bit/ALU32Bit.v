@@ -109,13 +109,17 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
                      LUI        = 'b100000;
     
     reg [5:0] Operation;
-    reg [31:0] temp_1 = 0, temp_2 = 0;
-    reg [63:0] temp64 = 0;
+    reg [31:0] temp_1, temp_2;
+    reg [63:0] temp64;
     
     initial begin
+        Operation <= 32'b0;
         HiLoEn <= 0;
-        HiLoWrite <= 0;
-        ALUResult <= 32'b0;
+        temp_1 <= 32'b0;
+        temp_2 <= 32'b0;
+        temp64 <= 64'd0;
+        HiLoWrite <= 64'd0;
+        ALUResult <= 32'd0;
     end
     
     always @(*) begin
@@ -143,7 +147,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
             MULTU: begin
                 RegWrite <= 0; // Write NOT Concur
                 HiLoEn = 1;
-                temp64 =$unsigned( A) * $unsigned(B);
+                temp64 = $unsigned(A) * $unsigned(B);
                 HiLoWrite <= temp64;
                 ALUResult <= 0; //No ALU Result defaults to zero;
             end
@@ -237,14 +241,14 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
             	RegWrite <= 0; // Write NOT Concur
             	HiLoEn = 1;
                 temp64 = $signed(A) * $signed(B);
-                HiLoWrite <= temp64 + HiLoRead;
+                HiLoWrite <= temp64 + HiLoRead[63:0];
                 ALUResult <= 0; //No ALU Result defaults to zero;
             end
             MSUB: begin
             	RegWrite <= 0; // Write NOT Concur
             	HiLoEn = 1;
-                temp64 = $signed(A) * $signed(B);
-                HiLoWrite <=  HiLoRead - temp64;
+                temp64 = ($signed(A) * $signed(B));
+                HiLoWrite <=  HiLoRead[63:0] - temp64;
                 ALUResult <= 0; //No ALU Result defaults to zero;
             end
             SEH_SEB: begin
@@ -272,7 +276,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
             MTLO: begin
                 RegWrite = 0;
                 HiLoEn = 1;
-                HiLoWrite[31:0] <= {HiLoRead[63:32],A}; 
+                HiLoWrite <= {HiLoRead[63:32],A}; 
                 ALUResult <= 0;
             end 
             EQ: begin //Checks if A and B are equal
