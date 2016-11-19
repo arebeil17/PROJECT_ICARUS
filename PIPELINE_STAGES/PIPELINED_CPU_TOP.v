@@ -29,7 +29,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     output wire ClkOut;
     
     // Demo Outputs
-    (* keep = "true" *) wire [31:0] DEMO_s1, DEMO_s2, DEMO_s3, DEMO_s4, DEMO_PC;
+    (* mark_debug = "true"*) wire [31:0] DEMO_s1, DEMO_s2, DEMO_s3, DEMO_s4, DEMO_PC;
     
     // FU Module Output(s)
     wire [1:0] FU_EXFWMuxAControl_Out, FU_EXFWMuxBControl_Out, FU_IDFWMuxAControl_Out, FU_IDFWMuxBControl_Out;
@@ -68,13 +68,13 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     wire [31:0] MEM_ReadData_Out;
     
     // MEMWB Stage Register Output(s)
-    (* keep = "true"*) wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
+    (* mark_debug = "true"*) wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
     wire [4:0] MEMWB_RegDest_Out;
     wire [1:0] MEMWB_MemToReg_Out;
     wire MEMWB_RegWrite_Out; 
     
     // WB Stage Output(s)
-    wire [31:0] WB_MemToReg_Out;
+    (* mark_debug = "true"*) wire [31:0] WB_MemToReg_Out;
     
     // Forwarding Unit
     Forwarder FU(
