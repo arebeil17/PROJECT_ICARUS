@@ -69,7 +69,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
     input [63:0] HiLoRead;
     
     output reg HiLoEn;
-    output reg [63:0] HiLoWrite;
+    output reg [63:0] HiLoWrite = 0;
     output reg RegWrite;
 	output reg [31:0] ALUResult;	// answer
 	output Zero;	    // Zero=1 if ALUResult == 0
@@ -113,13 +113,13 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
     reg [63:0] temp64;
     
     initial begin
-        Operation <= 32'b0;
+        Operation <= 32'd0;
         HiLoEn <= 0;
-        temp_1 <= 32'b0;
-        temp_2 <= 32'b0;
-        temp64 <= 64'b0;
-        HiLoWrite <= 64'b0;
-        ALUResult <= 32'b0;
+        temp_1 <= 32'd0;
+        temp_2 <= 32'd0;
+        temp64 <= 64'd0;
+        HiLoWrite <= 64'd0;
+        ALUResult <= 32'd0;
     end
     
     always @(ALUControl, Operation, A, B, Shamt, RS) begin

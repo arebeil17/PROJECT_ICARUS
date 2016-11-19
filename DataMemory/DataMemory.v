@@ -53,6 +53,9 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
     
     //initialize data memory
     initial begin
+        for(i = 0; i < 256; i = i + 1) begin
+                memory[i] = 0;
+        end
         //test cases 14-15
 //        memory[0] <= 32'd0;
 //        memory[1] <= 32'd1;
@@ -60,25 +63,25 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
 //        memory[3] <= 32'd3;
 //        memory[4] <= 32'd4;
 //        memory[5] <= -32'd1;    
+        
     
-    
-//        memory[0] <= 32'd100;
-//        memory[1] <= 32'd200;
-//        memory[2] <= 32'd300;
-//        memory[3] <= 32'd400;
-//        memory[4] <= 32'd500;
-//        memory[5] <= 32'd600;
-//        memory[6] <= 32'd700;
-//        memory[7] <= 32'd800;
-//        memory[8] <= 32'd900;
-//        memory[9] <= 32'd1000; 
-//        memory[10] <= 32'd1100;
-//        memory[11] <= 32'd1200;
+        memory[0] <= 32'd100;
+        memory[1] <= 32'd200;
+        memory[2] <= 32'd300;
+        memory[3] <= 32'd400;
+        memory[4] <= 32'd500;
+        memory[5] <= 32'd600;
+        memory[6] <= 32'd700;
+        memory[7] <= 32'd800;
+        memory[8] <= 32'd900;
+        memory[9] <= 32'd1000; 
+        memory[10] <= 32'd1100;
+        memory[11] <= 32'd1200;
 
         
-        for(i = 0; i < 256; i = i + 1) begin
-            memory[i] = 0;
-        end
+//        for(i = 0; i < 256; i = i + 1) begin
+//            memory[i] = 0;
+//        end
     end
 
     always @(posedge Clock) begin
