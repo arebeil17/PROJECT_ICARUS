@@ -122,7 +122,7 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
         ALUResult <= 32'b0;
     end
     
-    always @(ALUControl, Operation, A, B, Shamt, RS,) begin
+    always @(ALUControl, Operation, A, B, Shamt, RS) begin
         HiLoEn = 0;
         case(Operation)
             ADD: begin

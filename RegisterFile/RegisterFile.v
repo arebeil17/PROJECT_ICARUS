@@ -56,7 +56,9 @@ module RegisterFile(
     ReadRegister1, ReadRegister2, WriteRegister1, WriteRegister2, 
     // Control Output(s)
     // Data Output(s)
-    WriteData1, WriteData2,  ReadData1, ReadData2);
+    WriteData1, WriteData2,  ReadData1, ReadData2,
+    // Specials For Demonstration
+    s1_Out, s2_Out, s3_Out, s4_Out);
     
     input [4:0] ReadRegister1, ReadRegister2, WriteRegister1, WriteRegister2;
     input [31:0] WriteData1, WriteData2;
@@ -64,6 +66,7 @@ module RegisterFile(
     input Clk;
     
     output reg [31:0] ReadData1, ReadData2;
+    (* keep = "true" *) output [31:0] s1_Out, s2_Out, s3_Out, s4_Out;
     
     reg [31:0] registers [0:31];
     
@@ -100,9 +103,6 @@ module RegisterFile(
 	   registers[29] = 32'b00000000000000000000000000000000;
 	   registers[30] = 32'b00000000000000000000000000000000;
 	   registers[31] = 32'b00000000000000000000000000000000;
-	   
-	   //ReadData1 <= 32'b0;
-	   //ReadData2 <= 32'b0;
 	end
 
     always @(negedge Clk, posedge Reset) begin
@@ -151,9 +151,9 @@ module RegisterFile(
             end
         end
     end
-    //Should not be clocked  else will cause intermittent delays on reads
-    //always @(negedge Clk) begin
-    //    ReadData1 = registers[ReadRegister1];
-    //    ReadData2 = registers[ReadRegister2];
-    //end
+    
+    assign s1_Out = registers[17];
+    assign s2_Out = registers[18];
+    assign s3_Out = registers[19];
+    assign s4_Out = registers[20];
 endmodule

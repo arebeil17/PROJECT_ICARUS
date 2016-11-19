@@ -46,8 +46,8 @@ sub $s2, $s1, $s3	# 88 [s2] = 0x1f4		PASS
 and $t0, $s2, $s5	# 92 [t0] = 0x0			PASS
 or $t1, $s6, $s2	# 96 [t1] = 0x1f4		PASS
 add $t2, $s2, $s2	# 100 [t2] = 0x3e8		PASS
-la $s1 , asize0		# 104			
-sw $t1, 4($s1)		# 108			
+la $s1 , asize0		# 104
+sw $t1, 4($s1)		# 108
 lw $t2, 4($s1)		# 112 [t2] =  0x1f4		PASS
 
 #case 6 
@@ -61,8 +61,8 @@ add   $s4, $s7, $t2 # 132 [s4] = 000001f4	PASS
 la $t1, asize0		# 136				PASS
 lw $t0, 0($t1)		# 140 [t0] = 0x64	PASS
 lw $t2, 4($t1)		# 144 [t2] = 0x1f4	PASS
-sw $t2, 0($t1)		# 148				
-sw $t0, 4($t1)		# 152				
+sw $t2, 0($t1)		# 148
+sw $t0, 4($t1)		# 152
 lw $t0, 0($t1)		# 156 [t0] = 0x1f4	PASS
 lw $t2, 4($t1)		# 160 [t2] = 0x64	PASS
 
@@ -100,4 +100,3 @@ done:
 j done					# 244
 error:
 j error					# 248
-	          

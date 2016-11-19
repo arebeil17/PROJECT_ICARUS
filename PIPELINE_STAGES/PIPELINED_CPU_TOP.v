@@ -28,14 +28,14 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     output [7:0] en_out;
     output wire ClkOut;
     
+    // Demo Outputs
+    (* keep = "true" *) wire [31:0] DEMO_s1, DEMO_s2, DEMO_s3, DEMO_s4, DEMO_PC;
+    
     // FU Module Output(s)
     wire [1:0] FU_EXFWMuxAControl_Out, FU_EXFWMuxBControl_Out, FU_IDFWMuxAControl_Out, FU_IDFWMuxBControl_Out;
     
     // IF Stage Output(s)
     wire [31:0] IF_Instruction_Out, IF_PC_Out;
-    
-    //IFID Stage Register Inputs
-    //wire IFID_Flush;
     
     // IFID Stage Register Output(s)
     wire [31:0] IFID_Instruction_Out, IFID_PC_Out;
@@ -68,13 +68,13 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     wire [31:0] MEM_ReadData_Out;
     
     // MEMWB Stage Register Output(s)
-    wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
+    (* keep = "true"*) wire [31:0] MEMWB_ALUResult_Out, MEMWB_ReadData_Out, MEMWB_WriteAddress_Out, MEMWB_PC_Out;
     wire [4:0] MEMWB_RegDest_Out;
     wire [1:0] MEMWB_MemToReg_Out;
     wire MEMWB_RegWrite_Out; 
     
     // WB Stage Output(s)
-    (* mark_debus = "true"*) wire [31:0] WB_MemToReg_Out;
+    wire [31:0] WB_MemToReg_Out;
     
     // Forwarding Unit
     Forwarder FU(
@@ -161,7 +161,11 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .RF_RD2(ID_RF_RD2_Out),
         .IFIDFlush(ID_IFIDFlush_Out),
         .JumpDest(ID_JumpDest_Out),
-        .BranchDest(ID_BranchDest_Out));
+        .BranchDest(ID_BranchDest_Out),
+        .s1_Out(DEMO_s1),
+        .s2_Out(DEMO_s2),
+        .s3_Out(DEMO_s3),
+        .s4_Out(DEMO_s4));
                   
      IDEX_Reg    IDEX_SR(
         // Control Inputs
@@ -335,4 +339,5 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .Clk(Clk), 
         .Rst(Rst), 
         .ClkOut(ClkOut));
+    assign DEMO_PC = IFID_PC_Out;
 endmodule
