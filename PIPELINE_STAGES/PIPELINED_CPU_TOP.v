@@ -29,7 +29,9 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     output wire ClkOut;
     
     // Demo Outputs
-    (* mark_debug = "true"*) wire [31:0] DEMO_s1, DEMO_s2, DEMO_s3, DEMO_s4, DEMO_PC;
+    //(* mark_debug = "true"*) wire [31:0] DEMO_s1, DEMO_s2, DEMO_s3, DEMO_s4, DEMO_PC;
+    //reg [31:0] S1 = 0, S2 = 0, S3 = 0, S4 = 0;
+   
     
     // FU Module Output(s)
     wire [1:0] FU_EXFWMuxAControl_Out, FU_EXFWMuxBControl_Out, FU_IDFWMuxAControl_Out, FU_IDFWMuxBControl_Out;
@@ -161,11 +163,11 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .RF_RD2(ID_RF_RD2_Out),
         .IFIDFlush(ID_IFIDFlush_Out),
         .JumpDest(ID_JumpDest_Out),
-        .BranchDest(ID_BranchDest_Out),
-        .s1_Out(DEMO_s1),
+        .BranchDest(ID_BranchDest_Out)
+        /*.s1_Out(DEMO_s1),
         .s2_Out(DEMO_s2),
         .s3_Out(DEMO_s3),
-        .s4_Out(DEMO_s4));
+        .s4_Out(DEMO_s4)*/);
                   
      IDEX_Reg    IDEX_SR(
         // Control Inputs
@@ -339,5 +341,5 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .Clk(Clk), 
         .Rst(Rst), 
         .ClkOut(ClkOut));
-    assign DEMO_PC = IFID_PC_Out;
+    //assign DEMO_PC = IFID_PC_Out;
 endmodule

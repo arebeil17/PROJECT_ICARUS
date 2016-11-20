@@ -18,10 +18,10 @@ module ID_STAGE(
     // Data Output(s)
     SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest,
     // Demo Output
-    s1_Out, s2_Out, s3_Out, s4_Out);
+    /*s1_Out, s2_Out, s3_Out, s4_Out*/);
 
     // Demo Wires
-    output [31:0] s1_Out, s2_Out, s3_Out, s4_Out;
+    //output wire [31:0] s1_Out, s2_Out, s3_Out, s4_Out;
 
     input Clock, Reset, RegWrite_In, MemReadFromIDEX, RegWriteFromIDEX, MemReadFromEXMEM;
     input [1:0] FWMuxAControl, FWMuxBControl;
@@ -145,11 +145,11 @@ module ID_STAGE(
         .Clk(Clock),
         .ReadData1(RF_RD1),
         .ReadData2(RF_RD2),
-        .Reset(Reset),
-        .s1_Out(s1_Out),
+        .Reset(Reset)
+        /*.s1_Out(s1_Out),
         .s2_Out(s2_Out),
         .s3_Out(s3_Out),
-        .s4_Out(s4_Out));
+        .s4_Out(s4_Out)*/);
         
      SignExtension SE(
         .Control(SignExt),

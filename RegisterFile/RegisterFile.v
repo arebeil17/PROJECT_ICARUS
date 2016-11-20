@@ -58,7 +58,7 @@ module RegisterFile(
     // Data Output(s)
     WriteData1, WriteData2,  ReadData1, ReadData2,
     // Specials For Demonstration
-    s1_Out, s2_Out, s3_Out, s4_Out);
+    /*s1_Out, s2_Out, s3_Out, s4_Out*/);
     
     input [4:0] ReadRegister1, ReadRegister2, WriteRegister1, WriteRegister2;
     input [31:0] WriteData1, WriteData2;
@@ -66,7 +66,7 @@ module RegisterFile(
     input Clk;
     
     output reg [31:0] ReadData1, ReadData2;
-    (* keep = "true" *) output [31:0] s1_Out, s2_Out, s3_Out, s4_Out;
+     (* mark_debug = "true"*) reg [31:0] S1, S2, S3, S4;
     
     reg [31:0] registers [0:31];
     
@@ -152,8 +152,10 @@ module RegisterFile(
         end
     end
     
-    assign s1_Out = registers[17];
-    assign s2_Out = registers[18];
-    assign s3_Out = registers[19];
-    assign s4_Out = registers[20];
+    always @(*) begin
+        S1 <= registers[17];
+        S2 <= registers[18];
+        S3 <= registers[19];
+        S4 <= registers[20];
+    end
 endmodule
