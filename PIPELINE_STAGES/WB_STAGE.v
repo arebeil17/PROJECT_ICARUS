@@ -8,8 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module WB_STAGE(Clock, Reset, MemToReg, ALUResult, ReadData, PC, MemToReg_Out);
-    input Clock, Reset;
+module WB_STAGE(MemToReg, ALUResult, ReadData, PC, MemToReg_Out);
     input [1:0] MemToReg;
     input [31:0] ALUResult, ReadData, PC;
     

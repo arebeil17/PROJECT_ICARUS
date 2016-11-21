@@ -39,17 +39,14 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
 
     input [31:0] Address; 	// Input Address 
     input [31:0] WriteData; // Data to be Written into the Address 
-    input Clock;              // Clock Signal
+    input Clock;            // Clock Signal
     input MemWrite; 		// Control Signal for Memory Write 
     input MemRead; 			// Control Signal for Memory Read 
-    input [1:0] ByteSel;    // 00 for SW/LW 
-                            // 01 for Byte Select
-                            // 11 for Half Word
+    input [1:0] ByteSel;    // 00 for Word, 01 for Byte, 11 for Half
     
     output reg [31:0] ReadData; // Contents of memory location at Address
 
     reg [31:0] memory [0:255]; // 256x32 Registers
-    integer i = 0;
     
     //initialize data memory
     initial begin

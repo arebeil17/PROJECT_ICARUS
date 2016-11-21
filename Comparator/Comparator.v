@@ -53,9 +53,6 @@ module Comparator(Clock, InA, InB, Result, Control);
             BLEZ: begin
                 Result <= ($signed(InA) <= $signed(InB)) ? 1 : 0;
             end
-            BLTZ: begin
-                Result <= ($signed(InA) < $signed(InB)) ? 1 : 0;
-            end
             BNE: begin
                 Result <= (InA != InB) ? 1 : 0;
             end

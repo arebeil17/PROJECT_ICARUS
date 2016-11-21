@@ -1,10 +1,8 @@
 `timescale 1ns / 1ps
 
-module ALU_Controller(Reset, AluOp, Funct, ALUControl);
+module ALU_Controller(AluOp, Funct, ALUControl);
 
-    input Reset;
     input [4:0] AluOp;           // 5 bit AluOp code sent from controller 
-    
     input [5:0] Funct;           // 6 bit Instruction function field
     
     output reg [5:0] ALUControl; // 6 bit output control signal sent to ALU
@@ -95,10 +93,6 @@ module ALU_Controller(Reset, AluOp, Funct, ALUControl);
                      BLEZ       = 'b011110, // BLEZ     | 11110
                      JR         = 'b011111, // JR       |011111
                      LUI        = 'b100000; // LUI
-
-                     
-//    reg [3:0] State = DC;        //init dont care
-//    reg [5:0] Function = FC_add; //init to add
 
     always @(*) begin
         if(AluOp == ALUOP_DC) begin //If its a dont care then function code is checked
@@ -249,9 +243,6 @@ module ALU_Controller(Reset, AluOp, Funct, ALUControl);
                 ALUOP_LUI: begin // LUI
                     ALUControl <= LUI;
                 end
-                //default: begin
-                //    ALUControl <= ADD;
-                //end
             endcase
         end 
     end

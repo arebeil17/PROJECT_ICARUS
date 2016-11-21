@@ -61,7 +61,7 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite, HiLoRead, RegWrite);
+module ALU32Bit(ALUControl, A, B, Shamt, RS, ALUResult, HiLoEn, HiLoWrite, HiLoRead, RegWrite);
 
 	input [5:0] ALUControl; // control bits for ALU operation
 	input [31:0] A, B;	    // inputs
@@ -72,7 +72,6 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
     output reg [63:0] HiLoWrite = 0;
     output reg RegWrite;
 	output reg [31:0] ALUResult;	// answer
-	output Zero;	    // Zero=1 if ALUResult == 0
        
     localparam [5:0] ADD        = 'b000000,
                      ADDU       = 'b000001,
@@ -330,8 +329,6 @@ module ALU32Bit(ALUControl, A, B, Shamt, RS , ALUResult, Zero, HiLoEn, HiLoWrite
             end
         endcase
     end
-    
-    assign Zero = (ALUResult == 0) ?  1 :  0;
     
     always @(ALUControl, A, B, Shamt)begin
         Operation <= ALUControl;

@@ -6,21 +6,17 @@ module DatapathController(
     // Data Input(s)
     OpCode, Funct,
     // Control Output(s)
-    RegDest, RegWrite, AluSrc, AluOp, MemWrite, MemRead, Branch, MemToReg, SignExt, Jump, JumpMux, ByteSel, BCControl, BranchSourceMux, JAL/*StageWriteEnable, IFID_Flush*/
+    RegDest, RegWrite, AluSrc, AluOp, MemWrite, MemRead, Branch, MemToReg, SignExt, Jump, JumpMux, ByteSel, BCControl, BranchSourceMux, JAL
     // Data Output(s)
     );
     
     input Clock;
-    
     input[5:0] OpCode, Funct;
     
     output reg RegWrite, AluSrc, MemWrite, MemRead, Branch, SignExt, Jump, JumpMux, BranchSourceMux, JAL;
-    //output reg IFID_Flush;
-    
     output reg [1:0] RegDest, MemToReg, ByteSel;
     output reg [2:0] BCControl;
     output reg [4:0] AluOp;
-    //output reg [31:0] StageWriteEnable; // Has 3 Siginificant Bits 1 is IDEX_WriteEnable, 2 is EXMEM_WriteEnable, 4 is MEMWB_Enable
                             
     localparam [5:0] INITIAL = 'b111111,    // INITIAL
                     OP_000000 = 'b000000,   // Most R-type Instructions, JR
@@ -64,16 +60,13 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00001;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b000; IFID_Flush <= 0;
             end
             OP_000000: begin // Special (R-type Instructions and JR)
-                // TODO: JR Implementation, Can't set Jump <= 1 As PC+4 Does Not Get Written for all other commands
                 RegDest <= 2'b00; RegWrite <= 1; AluSrc <= 0; 
                 MemWrite <= 0; MemRead <= 0; Branch <= 0; 
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00000;
                 JumpMux <= 1; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
                 Jump <= (Funct == 6'b001000) ? 1 : 0;
             end
             OP_000001: begin // BGEZ & BLTZ
@@ -82,7 +75,6 @@ module DatapathController(
                 MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b10000;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b001; BranchSourceMux <= 1; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_000010: begin // J
                 RegDest <= 2'b00; RegWrite <= 0; AluSrc <= 0; 
@@ -90,7 +82,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00000;
                 Jump <= 1; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_000011: begin // JAL - NOT IMPLEMENTED
                 RegDest <= 2'b10; RegWrite <= 0; AluSrc <= 0; 
@@ -98,7 +89,6 @@ module DatapathController(
                 MemToReg <= 2'b10; SignExt <= 1; AluOp <= 'b00000;
                 Jump <= 1; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 1;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_000100: begin // BEQ
                 RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 0;
@@ -106,7 +96,6 @@ module DatapathController(
                 MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b01110;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0; 
             end
             OP_000101: begin // BNE
                 RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 0;
@@ -114,7 +103,6 @@ module DatapathController(
                 MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b01111;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b101; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0; 
             end
             OP_000110: begin // BLEZ
                RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 0;
@@ -122,7 +110,6 @@ module DatapathController(
                 MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b10010;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b011; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0; 
             end
             OP_000111: begin // BGTZ
                 RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 0;
@@ -130,7 +117,6 @@ module DatapathController(
                 MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b10001;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b010; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001000: begin // ADDI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -138,7 +124,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00001;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001001: begin // ADDIU
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -146,7 +131,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b00111;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001010: begin // SLTI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -154,7 +138,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b01010;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001011: begin //SLTUI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -162,7 +145,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b01011;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001100: begin // ANDI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -170,7 +152,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00100;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001101: begin // ORI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -178,7 +159,6 @@ module DatapathController(
                 MemToReg <= 2'b000; SignExt <= 0; AluOp <= 'b00011;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b00; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001110: begin // XORI
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1; 
@@ -186,7 +166,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b00101;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_001111: begin // LUI - Not Tested
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1;
@@ -194,7 +173,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b01010;
                 Jump <= 0; JumpMux <=0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_011100: begin // SPECIAL #2
                 RegDest <= 2'b00; RegWrite <= 1; AluSrc <= 0; 
@@ -202,7 +180,6 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 1; AluOp <= 'b01100;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_011111: begin // SEH & SEB
                 RegDest <= 2'b00; RegWrite <= 1; AluSrc <= 0; 
@@ -210,25 +187,20 @@ module DatapathController(
                 MemToReg <= 2'b00; SignExt <= 0; AluOp <= 'b01101;
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
-            // TODO: NEED TO FIND SOLUTION TO BE MEMORY READ/WRITE SAFE
             OP_100000: begin // LB
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1;
                 MemWrite <= 0; MemRead <= 1; Branch <= 0;
                 MemToReg <= 2'b01; SignExt <= 1; AluOp <= 'b00001; // Send ADDI to ALU Controller
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b01;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
-            // TODO: NEED TO FIND SOLUTION TO BE MEMORY READ/WRITE SAFE
             OP_100001: begin // LH
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1;
                 MemWrite <= 0; MemRead <= 1; Branch <= 0;
                 MemToReg <= 2'b01; SignExt <= 1; AluOp <= 'b00001; // Send ADDI to ALU Controller
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b11;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_100011: begin // LW
                 RegDest <= 2'b01; RegWrite <= 1; AluSrc <= 1;
@@ -236,9 +208,7 @@ module DatapathController(
                 MemToReg <= 2'b01; SignExt <= 1; AluOp <= 'b00001; // Send ADDI to ALU Controller
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
-            // TODO: NEED TO FIND SOLUTION TO BE MEMORY READ/WRITE SAFE
             OP_101000: begin // SB
                 RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 1;
                 MemWrite <= 1; MemRead <= 0; Branch <= 0;
@@ -247,14 +217,12 @@ module DatapathController(
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
                 //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
-            // TODO: NEED TO FIND SOLUTION TO BE MEMORY READ/WRITE SAFE
             OP_101001: begin // SH
                 RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 1;
                 MemWrite <= 1; MemRead <= 0; Branch <= 0;
                 MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b00001; // Send ADDI to ALU Controller
                 Jump <= 0; JumpMux <= 0; ByteSel <= 2'b11;
                 BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-                //StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
             OP_101011: begin // SW
             	RegDest <= 2'b01; RegWrite <= 0; AluSrc <= 1;
@@ -262,7 +230,6 @@ module DatapathController(
             	MemToReg <= 2'b11; SignExt <= 1; AluOp <= 'b00001; // Send ADDI to ALU Controller
             	Jump <= 0; JumpMux <= 0; ByteSel <= 2'b00;
             	BCControl <= 'b000; BranchSourceMux <= 0; JAL <= 0;
-            	//StageWriteEnable <= 3'b111; IFID_Flush <= 0;
             end
         endcase
      end

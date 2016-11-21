@@ -19,33 +19,20 @@ module EX_STAGE(
     // Data Output(s)
     ALUResult, FWMuxB_Out);
     
-    input Clock, Reset, ALUSrc,/* EXMEM_WriteEnable, MEMWB_WriteEnable, */RegWrite_In;
+    input Clock, Reset, ALUSrc, RegWrite_In;
     input [1:0] RegDestMuxControl, FWMuxAControl, FWMuxBControl;
-    input [4:0] ALUOp;//, EXMEM_RegDest, MEMWB_RegDest;
+    input [4:0] ALUOp;
     input [31:0] PC, Instruction, RF_RD1, RF_RD2, SE_In, FWFromMEM, FWFromWB, MEM_ReadData;
     
-    output RegWrite_Out;//, Zero;
+    output RegWrite_Out;
     output [4:0] RegDest;
-    output [31:0] ALUResult;//, BranchDest;
+    output [31:0] ALUResult;
     output wire [31:0] FWMuxB_Out;
     
     wire [63:0] HiLoWrite, HiLoRead;
-    wire [31:0] /*BranchShift_Out, */ALUSrc_Out, FWMuxA_Out;//, FWMuxB_Out;
+    wire [31:0] /*BranchShift_Out, */ALUSrc_Out, FWMuxA_Out;
     wire [5:0] ALUControl;
-    //wire [1:0] FWMuxAControl, FWMuxBControl;
     wire ALURegWrite;
-    
-    //Forwarder ForwardUnit(
-    //    .Clock(Clock),
-    //    .Reset(Reset),
-    //    .WriteEnableFromEXMEM(EXMEM_WriteEnable),
-    //    .WriteEnableFromMEMWB(MEMWB_WriteEnable),
-    //    .EX_Instruction(Instruction),
-    //    //.RegDest(MEM_RegDest),
-    //    .EXMEM_WriteReg(EXMEM_RegDest), 
-    //    .MEMWB_WriteReg(MEMWB_RegDest),
-    //    .FWMuxAControl(FWMuxAControl),
-    //    .FWMuxBControl(FWMuxBControl));
         
     Mux32Bit4To1 FWMuxA(
         .In0(RF_RD1),
@@ -62,19 +49,8 @@ module EX_STAGE(
         .In3(MEM_ReadData),
         .Out(FWMuxB_Out),
         .Sel(FWMuxBControl));
-    
-    //Adder BranchAdder(
-    //    .InA((PC+4)),
-    //    .InB(BranchShift_Out),
-    //    .Out(BranchDest));
-     
-    //ShiftLeft BranchShift(
-    //    .In(SE_In),
-    //    .Out(BranchShift_Out),
-    //    .Shift(5'd2));
 
     ALU_Controller ALUController(
-        .Reset(Reset),
         .AluOp(ALUOp),
         .Funct(Instruction[5:0]),
         .ALUControl(ALUControl));
@@ -92,7 +68,6 @@ module EX_STAGE(
         .Shamt(Instruction[10:6]),
         .RS(Instruction[25:21]),
         .ALUResult(ALUResult),
-        //.Zero(Zero),
         .HiLoEn(HiLoEn),
         .HiLoWrite(HiLoWrite), 
         .HiLoRead(HiLoRead),

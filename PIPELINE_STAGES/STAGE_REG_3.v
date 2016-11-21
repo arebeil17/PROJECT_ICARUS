@@ -67,18 +67,16 @@ module EXMEM_Reg(
             RegWrite_Out        <= 0;
             WriteData_Out       <= 32'b0;
         end else begin
-            //if(WriteEnable) begin
-                ALUResult_Out       <= ALUResult_In;
-                ByteSel_Out         <= ByteSel_In;
-                Instruction_Out     <= Instruction_In;
-                MemToReg_Out        <= MemToReg_In;
-                MemRead_Out         <= MemRead_In;
-                MemWrite_Out        <= MemWrite_In;
-                PC_Out              <= PC_In;
-                RegDest_Out         <= RegDest_In;
-                RegWrite_Out        <= RegWrite_In;
-                WriteData_Out       <= WriteData_In;
-            //end
+            ALUResult_Out       <= ALUResult_In;
+            ByteSel_Out         <= ByteSel_In;
+            Instruction_Out     <= Instruction_In;
+            MemToReg_Out        <= MemToReg_In;
+            MemRead_Out         <= MemRead_In;
+            MemWrite_Out        <= MemWrite_In;
+            PC_Out              <= PC_In;
+            RegDest_Out         <= RegDest_In;
+            RegWrite_Out        <= RegWrite_In;
+            WriteData_Out       <= WriteData_In;
         end
     end 
 endmodule

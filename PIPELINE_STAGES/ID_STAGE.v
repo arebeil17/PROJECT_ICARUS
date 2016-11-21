@@ -16,12 +16,7 @@ module ID_STAGE(
     // Control Output(s)
     IDEXFlush, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch_Out, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush,
     // Data Output(s)
-    SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest,
-    // Demo Output
-    /*s1_Out, s2_Out, s3_Out, s4_Out*/);
-
-    // Demo Wires
-    //output wire [31:0] s1_Out, s2_Out, s3_Out, s4_Out;
+    SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest);
 
     input Clock, Reset, RegWrite_In, MemReadFromIDEX, RegWriteFromIDEX, MemReadFromEXMEM;
     input [1:0] FWMuxAControl, FWMuxBControl;
@@ -101,7 +96,7 @@ module ID_STAGE(
     
     Mux32Bit2To1 BranchSourceMux(
         .In0(RF_RD2),
-        .In1({24'b0,Instruction[20:16]}),
+        .In1({27'b0,Instruction[20:16]}),
         .Out(BranchSourceMux_Out),
         .Sel(BranchSourceMuxControl));
         
@@ -130,8 +125,7 @@ module ID_STAGE(
         .ByteSel(ByteSel),
         .BCControl(BCControl),
         .BranchSourceMux(BranchSourceMuxControl),
-        .JAL(JAL)
-        /*.IFID_Flush(IFID_Flush)*/);
+        .JAL(JAL));
         
      RegisterFile RF(
         .ReadRegister1(Instruction[25:21]),
@@ -145,17 +139,12 @@ module ID_STAGE(
         .Clk(Clock),
         .ReadData1(RF_RD1),
         .ReadData2(RF_RD2),
-        .Reset(Reset)
-        /*.s1_Out(s1_Out),
-        .s2_Out(s2_Out),
-        .s3_Out(s3_Out),
-        .s4_Out(s4_Out)*/);
+        .Reset(Reset));
         
      SignExtension SE(
         .Control(SignExt),
         .In(Instruction[15:0]),
         .Out(SE_Out));
      
-     //assign Branch = Controller_Branch_Out & BC_Out;
      assign IFIDFlush = Branch_Out | Jump;
 endmodule

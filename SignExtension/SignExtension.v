@@ -18,8 +18,7 @@ module SignExtension(In, Out, Control);
         if(Control) begin
             Out <= {{16{In[15]}},In};
         end else begin
-            Out <= {{16{0}}, In};
-            //Out = (In[15] == 0) ? (In) : (In | 'hffff0000);
+            Out <= {16'b0, In};
         end
     end
 endmodule
