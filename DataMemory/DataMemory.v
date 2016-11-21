@@ -58,7 +58,9 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
         // Labs14-15DM.hex Initializes Memory to 1,2,3,4,-1 and Remaining to 0
         //$readmemh("Labs14-15DM.hex", memory);
         // Labs16-23DM.hex Initializes Memory to 100,200,...,1200 and Remaining to 0
-        //$readmemh("Labs16-23DM.hex", memory);
+        $readmemh("Labs16-23DM.hex", memory);
+        // Lab24DM.hex Initializes Memory for vbsme testing
+        //$readmemh("Lab24DM.hex", memory);
         // data_memory.txt is for Private Case Testing
         //$readmemh("data_memory.txt", memory);
     end
