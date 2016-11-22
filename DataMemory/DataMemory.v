@@ -47,6 +47,7 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
     output reg [31:0] ReadData; // Contents of memory location at Address
 
     reg [31:0] memory [0:255]; // 256x32 Registers
+    integer i = 0;
     
     //initialize data memory
     initial begin
@@ -55,11 +56,26 @@ module DataMemory(Address, WriteData, ByteSel, Clock, MemWrite, MemRead, ReadDat
         // Labs14-15DM.hex Initializes Memory to 1,2,3,4,-1 and Remaining to 0
         //$readmemh("Labs14-15DM.hex", memory);
         // Labs16-23DM.hex Initializes Memory to 100,200,...,1200 and Remaining to 0
-        $readmemh("Labs16-23DM.hex", memory);
+        //$readmemh("Labs16-23DM.hex", memory);
         // Lab24DM.hex Initializes Memory for vbsme testing
         //$readmemh("Lab24DM.hex", memory);
         // data_memory.txt is for Private Case Testing
         //$readmemh("data_memory.txt", memory);
+        for(i = 0; i < 256; i = i + 1) begin
+             memory[i] = 0;
+         end
+        memory[0] = 32'd100;
+        memory[1] = 32'd200;
+        memory[2] = 32'd300;
+        memory[3] = 32'd400;
+        memory[4] = 32'd500;
+        memory[5] = 32'd600;
+        memory[6] = 32'd700;
+        memory[7] = 32'd800;
+        memory[8] = 32'd900;
+        memory[9] = 32'd1000;
+        memory[10] = 32'd1100;
+        memory[11] = 32'd1200;
     end
 
     always @(posedge Clock) begin

@@ -20,9 +20,10 @@ loop:
 		lw    	$s2,     8($0)  		# s2 = MEM[2]
 		lw    	$s3,    12($0)  		# s3 = MEM[3]
 		add		$s4,	$s3,	$s1		# s4 = s3 + s1
-		add		$s5,	$s4,	$s1		# s5 = s4 + s1
+		add		$s5,	$s3,	$s2		# s5 = s3 + s2
 		mul     $s6,    $s3,    $s2     # s6 = s3 * s2
 		sw    	$s6,    24($0)  		# MEM[6] = s6
 		lw    	$s6,    24($0)  		# s6 = MEM[6]
-		add		$s7,	$s6,	$s1		# s7 = s6 + s1   
+		add		$s7,	$s6,	$s1		# s7 = s6 + s1
+		add		$t8,	$s2,	$6		# t8 = s2 + s6		
     	j       loop

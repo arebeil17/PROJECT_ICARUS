@@ -45,15 +45,16 @@ module InstructionMemory(Address, Instruction);
     
     initial begin
         // Labs9-13IM.hex initializes all memory to 0x00000000
-        //$readmemh("Labs9-13DM.hex", memory);
+        //$readmemh("Labs9-13IM.hex", memory);
         // Labs14-15IM.hex Initializes Instruction Memory
-        //$readmemh("Labs14-15DM.hex", memory);
+        //$readmemh("Labs14-15IM.hex", memory);
         // Labs16-23IM.hex Initializes Instruction Memory
-        $readmemh("Labs16-23DM.hex", memory);
+       //$readmemh("Labs16-23IM.hex", memory);
         // Lab24IM.hex Initializes Instruction Memory for vbsme testing
         //$readmemh("Lab24IM.hex", memory);
         // Instruction_memory.txt is for Private Case Testing
         //$readmemh("Instruction_memory.txt", memory);
+        $readmemh("test9IM.hex", memory);
     end
 
     assign Instruction = memory[Address[31:2]];
