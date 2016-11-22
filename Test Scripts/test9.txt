@@ -1,6 +1,6 @@
 .text
 main:
-		addi    $t1,    $0,     1		# t1 = 1
+		addi    $t1,    $0,     1		# t1 = 1	
 		addi    $t2,    $0,     2		# t2 = 2
 		addi    $t3,    $0,     3		# t3 = 3
 		addi    $t4,    $0,     4		# t4 = 4
@@ -25,5 +25,34 @@ loop:
 		sw    	$s6,    24($0)  		# MEM[6] = s6
 		lw    	$s6,    24($0)  		# s6 = MEM[6]
 		add		$s7,	$s6,	$s1		# s7 = s6 + s1
-		add		$t8,	$s2,	$6		# t8 = s2 + s6		
-    	j       loop
+		add		$t8,	$s2,	$s6		# t8 = s2 + s6
+		addi    $s0,    $0,     27		# s0 = 27
+		addi    $t1,    $0,     27		# t1 = 27
+		sw    	$s0,    24($0)  		# MEM[6] = s0
+		lw    	$s0,    24($0)  		# s0 = MEM[6]
+		sub    	$t1,    $t1,    $t2		# t1 = t1 - t2 = 25
+		bne		$s0,    $t1,	branch1 # if(s0 != t1)  branch1
+		j 		Fail
+branch1:
+		lw 		$s0,    4($0)  			# s0 = MEM[1] = 1
+		beq		$s0,    $s1, 	branch2 # if(s0 == s1) branch2
+		j 		Fail
+branch2:	
+		sll		$s1, 	$t2, 	2		# s1 = t2 << 2 = 8
+		beq		$s1, 	$t8,   JAL_TEST # if(s1 = t8)  branch3
+		j 		Fail
+JAL_TEST:								#JAL TORTURE TEST
+		jal		JAL1
+    	jal     JAL2
+		jal		JAL3
+		j		loop
+Fail:		
+		j 		Fail
+JAL1:	
+		jr		$ra			
+JAL2:	
+		jr		$ra	
+JAL3:
+		addi	$ra,	$ra, -4
+		addi	$ra,	$ra,  4
+		jr 		$ra

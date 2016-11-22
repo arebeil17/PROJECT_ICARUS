@@ -54,6 +54,7 @@ module InstructionMemory(Address, Instruction);
         //$readmemh("Lab24IM.hex", memory);
         // Instruction_memory.txt is for Private Case Testing
         //$readmemh("Instruction_memory.txt", memory);
+        //Dependent LW and BRANCH testing PLUS JAL TORTURE TEST
         $readmemh("test9IM.hex", memory);
     end
 

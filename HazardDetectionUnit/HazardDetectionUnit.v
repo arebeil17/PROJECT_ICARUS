@@ -74,7 +74,7 @@ module HazardDetectionUnit(
             end
         end else if((MemReadFromIDEX || MemReadFromID)) begin // Check if Previous/Current Command was/is LW
             if((EXInstruction[20:16] == IDInstruction[25:21] || 
-                EXInstruction[20:16] == IDInstruction[20:16]) && EXInstruction[20:16] != 5'b00000)begin
+                EXInstruction[20:16] == IDInstruction[20:16] ) && EXInstruction[20:16] != 5'b00000)begin
                 PCWriteEnable <= 0;
                 IFIDWriteEnable <= 0;
                 IDEXFlush <= 1;
