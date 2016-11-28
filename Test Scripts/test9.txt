@@ -52,9 +52,7 @@ JAL1:
 		jr		$ra			
 JAL2:	
 		jr		$ra	
-JAL3:	
-		addi	$ra,	$ra,  128
-		addi	$ra,	$ra,  128
-		addi	$ra,	$ra,  -128
-		addi	$ra,	$ra,  -128
+JAL3:
+		addi	$ra,	$ra, -4
+		addi	$ra,	$ra,  4
 		jr 		$ra
