@@ -39,7 +39,7 @@ branch1:
 		j 		Fail
 branch2:	
 		sll		$s1, 	$t2, 	2		# s1 = t2 << 2 = 8
-		beq		$s1, 	$t8,   JAL_TEST # if(s1 = t8)  branch3
+		beq		$t8, 	$s1,   JAL_TEST # if(s1 = t8)  branch3
 		j 		Fail
 JAL_TEST:								#JAL TORTURE TEST
 		jal		JAL1
