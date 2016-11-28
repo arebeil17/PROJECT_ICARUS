@@ -31,7 +31,7 @@ module ID_STAGE(
     output [4:0] ALUOp;
     output [31:0] JumpDest;
     
-    wire SignExt, LoadMuxControl, Control_WriteEnableMux, Controller_Branch_Out, JumpMuxSel, BC_Out, BranchSourceMuxControl, JAL;
+    wire SignExt, LoadMuxControl, Control_WriteEnableMux, Controller_Branch_Out, Controller_Jump_Out, JumpMuxSel, BC_Out, BranchSourceMuxControl, JAL;
     wire [2:0] BCControl;
     wire [31:0] BranchShift_Out, JumpShift_Out, WriteEnable, BranchSourceMux_Out, FWMuxA_Out, FWMuxB_Out;
     
@@ -45,6 +45,7 @@ module ID_STAGE(
         .BranchFromController(Controller_Branch_Out),
         .BranchFromBC(BC_Out),
         .RegWriteFromIDEX(RegWriteFromIDEX),
+        .JumpFromController(Controller_Jump_Out),
         // Data Input(s)
         .IDInstruction(Instruction),
         .EXInstruction(EX_Instruction_In),
@@ -53,7 +54,8 @@ module ID_STAGE(
         .PCWriteEnable(PC_WriteEnable),
         .IFIDWriteEnable(IFIDWriteEnable_Out),
         .IDEXFlush(IDEXFlush),
-        .Branch(Branch_Out));
+        .Branch(Branch_Out),
+        .Jump(Jump));
     
     // Jump Resolution
     ShiftLeft JumpShift(
@@ -63,7 +65,7 @@ module ID_STAGE(
             
     Mux32Bit2To1 JumpMux(
         .In0({PC[31:28],JumpShift_Out[27:0]}),
-        .In1(RF_RD1),
+        .In1(FWMuxA_Out),
         .Out(JumpDest),
         .Sel(JumpMuxSel));
     
@@ -120,7 +122,7 @@ module ID_STAGE(
         .Branch(Controller_Branch_Out),
         .MemToReg(MemToReg),
         .SignExt(SignExt),
-        .Jump(Jump),
+        .Jump(Controller_Jump_Out),
         .JumpMux(JumpMuxSel),
         .ByteSel(ByteSel),
         .BCControl(BCControl),
