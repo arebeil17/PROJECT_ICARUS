@@ -18,17 +18,17 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module Reg32(Clk, Rst, En, data, Output);
+module Reg32(Clk, Rst, data, Output);
 
-    input Clk, Rst, En;
+    input Clk, Rst;
     input [31:0] data;
     
     output reg [31:0] Output = 0;
     
-    always @(posedge Clk) begin
+    always @(negedge Clk) begin
         if(Rst)
             Output <= 0;
-        else if(En)
+        else
             Output <= data;
     end
     

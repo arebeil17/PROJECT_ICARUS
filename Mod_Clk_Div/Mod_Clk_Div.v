@@ -28,13 +28,10 @@ module Mod_Clk_Div(In, Clk, Rst, ClkOut);
               DivVal_8 = 10000000,   //Constant for 5 Hz
               DivVal_9 = 5000000,   //Constant for 10 Hz
               DivVal_10 = 4166666,   //Constant for 12 Hz
-              //VBSME DEBUG SPEEDS
-              DivVal_11 = 3125000,   //Constant for 16 Hz
-              DivVal_12 = 2000000,   //Constant for 25 Hz
-              DivVal_13 = 1000000,   //Constant for 50 Hz
-              DivVal_14 = 500000,   //Constant for 100 Hz
-              DivVal_Test1 = 2,     //Constant for  25 MHz  
-              DivVal_Test2 = 1;     //For test benching 50 MHz
+              DivVal_13 = 3571428,   //Constant for 14 Hz
+              DivVal_14 = 3125000,   //Constant for 16 Hz
+              DivVal_Test1 = 2,
+              DivVal_Test2 = 1;       //For test benching
               
     reg [28:0] DivCnt = 0;
     reg ClkInt = 0;
@@ -49,7 +46,7 @@ module Mod_Clk_Div(In, Clk, Rst, ClkOut);
                DivSel <= TempSel;
         end 
         else if( DivCnt == DivSel ) begin//Checks if desired clock interval
-            ClkOut <= ~ClkInt;          //has been reached
+            ClkOut <= ~ClkInt;      //has been reached
             ClkInt <= ~ClkInt;
             DivCnt <= 0;
         end
@@ -105,18 +102,22 @@ module Mod_Clk_Div(In, Clk, Rst, ClkOut);
             TempSel <= DivVal_9;
             //TempSel <= DivVal_Test2;
        end                    
-       else if(4'b1011==In) begin
-            TempSel <= DivVal_10;  
-       end 
-       else if(4'b1100==In) begin //16 Hz
-            TempSel <= DivVal_11;  
-       end                                             
-       else if(4'b1101==In) begin //25 Hz
-            TempSel <= DivVal_12;  
-       end                       
-       else if(4'b1110==In) begin //50 Hz
-            TempSel <= DivVal_13;  
-       end                                                                                                                   
+//       else if(4'b1010==In) begin
+//            TempSel <= DivVal_10;  
+//       end 
+//       else if(4'b1011==In) begin
+//            TempSel <= DivVal_11;  
+//       end                                             
+//       else if(4'b1100==In) begin
+//            TempSel <= DivVal_12;  
+//       end                       
+//       else if(4'b1101==In) begin
+//            TempSel <= DivVal_13;  
+//       end
+       else if(4'b1010 == In) begin
+            TempSel <= DivVal_14; 
+            //TempSel <= DivVal_Test2; 
+       end                                                                                                                     
        else if(4'b1111==In) begin
             TempSel <= DivVal_Test2;
        end

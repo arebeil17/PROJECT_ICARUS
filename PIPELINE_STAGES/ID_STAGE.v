@@ -16,14 +16,14 @@ module ID_STAGE(
     // Control Output(s)
     IDEXFlush, ALUOp, RegWrite, ALUSrc, MemWrite, MemRead, Branch_Out, MemToReg, ByteSel, RegDestMuxControl, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush,
     // Data Output(s)
-    SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest, V0_Out, V1_Out);
+    SE_Out, RF_RD1, RF_RD2, BranchDest, JumpDest);
 
     input Clock, Reset, RegWrite_In, MemReadFromIDEX, RegWriteFromIDEX, MemReadFromEXMEM;
     input [1:0] FWMuxAControl, FWMuxBControl;
     input [4:0] WriteAddress;
     input [31:0] Instruction, MEM_Instruction_In, EX_Instruction_In, WriteData, PC, FWFromMEM, FWFromWB;
     //Output wires
-    output wire [31:0] SE_Out, RF_RD1, RF_RD2, BranchDest, V0_Out, V1_Out;
+    output wire [31:0] SE_Out, RF_RD1, RF_RD2, BranchDest;
          
     //Control Signal Outputs
     output IDEXFlush, RegWrite, ALUSrc, MemWrite, MemRead, Branch_Out, Jump, PC_WriteEnable, IFIDWriteEnable_Out, IFIDFlush;
@@ -141,9 +141,7 @@ module ID_STAGE(
         .Clk(Clock),
         .ReadData1(RF_RD1),
         .ReadData2(RF_RD2),
-        .Reset(Reset),
-        .V0(V0_Out), 
-        .V1(V1_Out));
+        .Reset(Reset));
         
      SignExtension SE(
         .Control(SignExt),

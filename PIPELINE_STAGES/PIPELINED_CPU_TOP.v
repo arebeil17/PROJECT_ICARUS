@@ -41,7 +41,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     wire ID_IFIDFlush_Out, ID_Flush_Out, ID_RegWrite_Out, ID_ALUSrc_Out, ID_MemWrite_Out, ID_MemRead_Out, ID_Branch_Out, ID_SignExt_Out, ID_PCWriteEnable_Out, ID_IFIDWriteEnable_Out, ID_Jump_Out;
     wire [1:0] ID_ByteSel_Out, ID_RegDestMuxControl_Out, ID_MemToReg_Out;
     wire [4:0] ID_ALUOp_Out;
-    wire [31:0] ID_RF_RD1_Out, ID_RF_RD2_Out, ID_SE_Out, ID_BranchDest_Out, ID_JumpDest_Out, V0_Out, V1_Out, V0_RegOut, V1_RegOut;
+    wire [31:0] ID_RF_RD1_Out, ID_RF_RD2_Out, ID_SE_Out, ID_BranchDest_Out, ID_JumpDest_Out;
     
     // IDEX Stage Register Output(s)
     wire IDEX_RegWrite_Out, IDEX_ALUSrc_Out, IDEX_MemWrite_Out, IDEX_MemRead_Out, IDEX_Branch_Out, IDEX_SignExt_Out;      
@@ -158,9 +158,7 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
         .RF_RD2(ID_RF_RD2_Out),
         .IFIDFlush(ID_IFIDFlush_Out),
         .JumpDest(ID_JumpDest_Out),
-        .BranchDest(ID_BranchDest_Out),
-        .V0_Out(V0_Out), 
-        .V1_Out(V1_Out));
+        .BranchDest(ID_BranchDest_Out));
                   
      IDEX_Reg    IDEX_SR(
         // Control Inputs
@@ -304,35 +302,21 @@ module PIPELINED_CPU_TOP(Clk, Rst, out7, en_out, ClkOut);
     
     Two4DigitDisplay Display(
         .Clk(Clk),
-        .NumberA(V1_RegOut), 
-        .NumberB(V0_RegOut), 
+        .NumberA(WriteOutReg), 
+        .NumberB(PC_OutReg), 
         .out7(out7), 
         .en_out(en_out));
-        
-//     Reg32 WriteOutput(
-//        .Clk(ClkOut), 
-//        .Rst(Rst), 
-//        .data(WB_MemToReg_Out), 
-//        .Output(WriteOutReg));
-//     Reg32 PCOutput(
-//        .Clk(ClkOut), 
-//        .Rst(Rst), 
-//        .data(MEMWB_PC_Out), 
-//        .Output(PC_OutReg));
-
-    Reg32 V1_Reg(
-          .Clk(ClkOut), 
-          .Rst(Rst), 
-          .En('b1),
-          .data(V1_Out), 
-          .Output(V1_RegOut));
-    Reg32 V0_Reg(
-          .Clk(ClkOut), 
-          .Rst(Rst),
-          .En('b1), 
-          .data(V0_Out), 
-          .Output(V0_RegOut));
-          
+     Reg32 WriteOutput(
+        .Clk(ClkOut), 
+        .Rst(Rst), 
+        .data(WB_MemToReg_Out), 
+        .Output(WriteOutReg));
+     Reg32 PCOutput(
+        .Clk(ClkOut), 
+        .Rst(Rst), 
+        .data(MEMWB_PC_Out), 
+        .Output(PC_OutReg));
+    
     // Clock Divider
     Mod_Clk_Div MCD(
         .In(4'b1111), // For Testing
